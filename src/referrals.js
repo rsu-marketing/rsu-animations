@@ -89,6 +89,18 @@ function referrals() {
     }
   );
 
+  gsap.fromTo(".c-button-wrapper.cc-hero", {
+    y: '5rem',
+    opacity: 0
+  }, {
+    y: '0rem',
+    delay: 1,
+    duration: 0.8,
+    opacity: 1,
+  });
+
+  
+
   // Animate letter wrapper
   gsap.fromTo(
     ".c-letter-wrapper",
