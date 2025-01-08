@@ -101,7 +101,16 @@ function referrals() {
 
   
 
-  //
+  //Animate How it works
+  gsap.fromTo(".c-referral-process__step", {
+    y: '5rem',
+    opacity: 0
+  }, {
+    y: '0rem',
+    delay: 0.4,
+    duration: 0.8,
+    opacity: 1,
+  });
 
  
 
