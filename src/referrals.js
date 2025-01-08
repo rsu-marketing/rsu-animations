@@ -166,6 +166,21 @@ gsap.fromTo(".referrals-hero-img", {
 
   ScrollTrigger.addEventListener("refresh", setupSplits);
   setupSplits();
+
+
+
+  // MARQUEE ON SCROLL
+
+      gsap.to(".c-scroll-marquee-wrapper", {
+        scrollTrigger: {
+          trigger: ".c-scroll-marquee-wrapper",
+          start: "top 100%",
+          scrub: true,
+        },
+        xPercent: -20,
+        ease: "quart.easeOut",
+      });
+
   
 
   // Footer CTA
