@@ -110,6 +110,7 @@ function referrals() {
     delay: 0.4,
     duration: 0.8,
     opacity: 1,
+    stagger: 0.3,
   });
 
  
