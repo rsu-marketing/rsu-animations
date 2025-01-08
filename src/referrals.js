@@ -339,5 +339,3 @@ const steps = gsap.utils.toArray(".c-referral-process__step");
 }
 
 export default referrals;
-
-
