@@ -115,28 +115,20 @@ gsap.fromTo(".referrals-hero-img", {
   
 
   //Animate How it works
-const steps = gsap.utils.toArray(".c-referral-process__step");
-  steps.forEach((step, index) => {
-  gsap.fromTo(step,
-  {
+
+   gsap.fromTo(".c-referral-process__step", {
     y: '5rem',
     opacity: 0
-  }, 
-  {
+  }, {
     y: '0rem',
     duration: 0.8,
     opacity: 1,
-    delay: index * 0.3,
     scrollTrigger: {
-      trigger: step,
-      start: "top 85%",
-      end: "bottom top",
+      trigger: '.c-referral-process__step',
+      start: 'bot 95%',
       toggleActions: "play none none reverse",
-      once: false,
-      markers: false,
     }
-  }
-);
+  });
   
 
 
