@@ -129,8 +129,44 @@ gsap.fromTo(".referrals-hero-img", {
       toggleActions: "play none none reverse",
     }
   });
-  
 
+  
+  
+ // anim Fast txt
+
+  const quotes = document.querySelectorAll(".cc-split");
+
+  function setupSplits() {
+    quotes.forEach(quote => {
+      // Reset if needed
+      if (quote.anim) {
+        quote.anim.progress(1).kill();
+        quote.split.revert();
+      }
+
+      quote.split = new SplitText(quote, {
+        type: "lines,words,chars",
+        linesClass: "split-line"
+      });
+
+      // Set up the anim
+      quote.anim = gsap.from(quote.split.words, {
+        scrollTrigger: {
+          trigger: quote,
+          toggleActions: "play none none reverse",
+          start: "top 80%",
+        },
+        duration: 0.5,
+        opacity: 0,
+        y: 5,
+        stagger: 0.1,
+      });
+    });
+  }
+
+  ScrollTrigger.addEventListener("refresh", setupSplits);
+  setupSplits();
+  
 
   // Footer CTA
   // Footer chart animation
