@@ -116,7 +116,7 @@ gsap.fromTo(".referrals-hero-img", {
 
   //Animate How it works
 
-   gsap.fromTo(".fade-in-element", {
+   gsap.fromTo(".c-referral-process__step", {
     y: '5rem',
     opacity: 0
   }, {
@@ -124,7 +124,7 @@ gsap.fromTo(".referrals-hero-img", {
     duration: 0.8,
     opacity: 1,
     scrollTrigger: {
-      trigger: '.fade-in-element',
+      trigger: '.c-referral-process__step',
       start: 'bot 95%',
       toggleActions: "play none none reverse",
     }
