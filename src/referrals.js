@@ -111,17 +111,6 @@ gsap.fromTo(".referrals-hero-img", {
     duration: 1.2,
     opacity: 1,
   });
-
-  gsap.to(".referrals-hero-img", {
-    scrollTrigger: {
-      trigger: ".referrals-hero-img",
-      start: "middle",
-      end: "bottom -10%",
-      scrub: true,
-    },
-    y: '-8rem',
-    ease: "quart.easeOut",
-  });
   
   
 
