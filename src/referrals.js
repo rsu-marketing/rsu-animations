@@ -94,44 +94,16 @@ function referrals() {
     opacity: 0
   }, {
     y: '0rem',
-    delay: 1,
-    duration: 0.4,
+    delay: 0.4,
+    duration: 0.8,
     opacity: 1,
   });
 
   
 
-  // Animate letter wrapper
-  gsap.fromTo(
-    ".c-letter-wrapper",
-    { y: "5rem", opacity: 0 },
-    {
-      y: "0rem",
-      duration: 0.8,
-      opacity: 1,
-      scrollTrigger: {
-        trigger: ".c-letter-wrapper",
-        start: "bot 95%",
-        toggleActions: "play none none reverse",
-      },
-    }
-  );
+  //
 
-  // Split text
-  let aboutText = new SplitText(".cc-split", { type: "words" });
-
-  gsap.from(aboutText.words, {
-    opacity: 0.15,
-    duration: 0.2,
-    ease: "none",
-    stagger: 0.2,
-    scrollTrigger: {
-      trigger: ".cc-split",
-      start: "top 80%",
-      end: "bot",
-      scrub: true,
-    },
-  });
+ 
 
   // Footer CTA
   // Footer chart animation
