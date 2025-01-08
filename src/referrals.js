@@ -127,7 +127,7 @@ gsap.fromTo(".c-referral-process__step",
     opacity: 1,
     stagger: 0.3,
     scrollTrigger: {
-      trigger: ".c-referral-process",
+      trigger: ".c-referral-process__step",
       start: "top 85%",
       end: "bottom top",
       toggleActions: "play none none reverse",
