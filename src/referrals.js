@@ -116,21 +116,18 @@ gsap.fromTo(".referrals-hero-img", {
 
   //Animate How it works
 
- window.addEventListener('load', function () {
-    gsap.utils.toArray(".c-referral-process__step").forEach((element, index) => {
-      gsap.from(element, {
-        opacity: 0,
-        y: "6.25rem",
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: element,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-          stagger: 0.2 * index
-        }
-      });
-    });
+   gsap.fromTo(".c-referral-process__step", {
+    y: '5rem',
+    opacity: 0
+  }, {
+    y: '0rem',
+    duration: 0.8,
+    opacity: 1,
+    scrollTrigger: {
+      trigger: '.c-referral-process__step',
+      start: 'bot 95%',
+      toggleActions: "play none none reverse",
+    }
   });
   
 /*
