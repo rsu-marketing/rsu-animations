@@ -22,7 +22,8 @@ function referrals() {
   links.forEach((link) => {
     link.addEventListener("click", () => {
       setTimeout(() => {
-        ScrollTrigger.refresh();  // Fixed typo (removed 'ggi')
+        ggi
+        ScrollTrigger.refresh();
       }, 300);
     });
   });
@@ -38,9 +39,11 @@ function referrals() {
         event.stopPropagation();
 
         if (lastOpenedDropdown === dropdown) {
+          // Close dropdown if clicking the same dropdown
           lastOpenedDropdown = null;
           navBg.style.display = "none";
         } else {
+          // If another dropdown is clicked, close the others
           dropdowns.forEach((otherDropdown) => {
             otherDropdown.classList.remove("open");
           });
@@ -51,16 +54,19 @@ function referrals() {
       });
     });
 
-    document.addEventListener("click", () => {
-      dropdowns.forEach((dropdown) => {
-        dropdown.classList.remove("open");
-      });
-      navBg.style.display = "none";
-      lastOpenedDropdown = null;
+    document.addEventListener("click", (event) => {
+      if (!event.target.classList.contains("c-dropdown")) {
+        // Clicking outside all dropdowns closes them
+        dropdowns.forEach((dropdown) => {
+          dropdown.classList.remove("open");
+        });
+        navBg.style.display = "none";
+        lastOpenedDropdown = null;
+      }
     });
 
     navBg.addEventListener("click", (event) => {
-      event.stopPropagation();
+      event.stopPropagation(); // Prevent click propagation to the outside
       navBg.style.display = "none";
       lastOpenedDropdown = null;
     });
@@ -77,7 +83,7 @@ function referrals() {
       opacity: 1,
       scrollTrigger: {
         trigger: ".c-text-container.cc-relative",
-        start: "top 85%",  // Fixed 'bot' to 'top' for correct trigger
+        start: "bot 85%",
         toggleActions: "play none none reverse",
       },
     }
@@ -93,8 +99,10 @@ function referrals() {
     opacity: 1,
   });
 
-  // Animate Hero Image
-  gsap.fromTo(".referrals-hero-img", {
+
+//Animate Hero Image
+
+gsap.fromTo(".referrals-hero-img", {
     y: '-5rem',
     opacity: 0
   }, {
@@ -103,58 +111,108 @@ function referrals() {
     duration: 1.2,
     opacity: 1,
   });
+  
+  
 
-  // Animate How it works
-  const steps = gsap.utils.toArray(".c-referral-process__step");
+  //Animate How it works
+const steps = gsap.utils.toArray(".c-referral-process__step");
   steps.forEach((step, index) => {
-    gsap.fromTo(step,
-      {
-        y: '5rem',
-        opacity: 0
-      },
-      {
-        y: '0rem',
-        duration: 0.8,
-        opacity: 1,
-        delay: index * 0.3,
-        scrollTrigger: {
-          trigger: step,
-          start: "top 85%",
-          end: "bottom top",
-          toggleActions: "play none none reverse",
-          once: false,
-          markers: false,
-        }
-      }
-    );
-  });
+  gsap.fromTo(step,
+  {
+    y: '5rem',
+    opacity: 0
+  }, 
+  {
+    y: '0rem',
+    duration: 0.8,
+    opacity: 1,
+    delay: index * 0.3,
+    scrollTrigger: {
+      trigger: step,
+      start: "top 85%",
+      end: "bottom top",
+      toggleActions: "play none none reverse",
+      once: false,
+      markers: false,
+    }
+  }
+);
+  
+
 
   // Footer CTA
-  const chartAnimations = [
-    { selector: ".c-img-chart-footer.cc-one", y: "-11rem" },
-    { selector: ".c-img-chart-footer.cc-two", y: "-20rem" },
-    { selector: ".c-img-chart-footer.cc-three", y: "-7rem" },
-    { selector: ".c-img-chart-footer.cc-four", y: "-2rem" },
-    { selector: ".c-img-chart-footer.cc-five", y: "-6rem" },
-    { selector: ".c-img-chart-footer.cc-six", y: "-11rem" }
-  ];
+  // Footer chart animation
+  gsap.to(".c-img-chart-footer.cc-one", {
+    scrollTrigger: {
+      trigger: ".c-chart-footer-wrapper",
+      start: "top 100%",
+      end: "bottom -10%",
+      scrub: true,
+    },
+    y: "-11rem",
+    ease: "quart.easeOut",
+  });
 
-  chartAnimations.forEach(item => {
-    gsap.to(item.selector, {
-      scrollTrigger: {
-        trigger: ".c-chart-footer-wrapper",
-        start: "top 100%",
-        end: "bottom -10%",
-        scrub: true,
-      },
-      y: item.y,
-      ease: "quart.easeOut",
-    });
+  gsap.to(".c-img-chart-footer.cc-two", {
+    scrollTrigger: {
+      trigger: ".c-chart-footer-wrapper",
+      start: "top 100%",
+      end: "bottom -10%",
+      scrub: true,
+    },
+    y: "-20rem",
+    ease: "quart.easeOut",
+  });
+
+  gsap.to(".c-img-chart-footer.cc-three", {
+    scrollTrigger: {
+      trigger: ".c-chart-footer-wrapper",
+      start: "top 100%",
+      end: "bottom -10%",
+      scrub: true,
+    },
+    y: "-7rem",
+    ease: "quart.easeOut",
+  });
+
+  gsap.to(".c-img-chart-footer.cc-four", {
+    scrollTrigger: {
+      trigger: ".c-chart-footer-wrapper",
+      start: "top 100%",
+      end: "bottom -10%",
+      scrub: true,
+    },
+    y: "-2rem",
+    ease: "quart.easeOut",
+  });
+
+  gsap.to(".c-img-chart-footer.cc-five", {
+    scrollTrigger: {
+      trigger: ".c-chart-footer-wrapper",
+      start: "top 100%",
+      end: "bottom -10%",
+      scrub: true,
+    },
+    y: "-6rem",
+    ease: "quart.easeOut",
+  });
+
+  gsap.to(".c-img-chart-footer.cc-six", {
+    scrollTrigger: {
+      trigger: ".c-chart-footer-wrapper",
+      start: "top 100%",
+      end: "bottom -10%",
+      scrub: true,
+    },
+    y: "-11rem",
+    ease: "quart.easeOut",
   });
 
   // Responsive animations
   ScrollTrigger.matchMedia({
+    // Large screens
     "(min-width: 992px)": function () {
+      // Growing IMG CTA Footer
       gsap.to(".c-img-cta-footer.cc-one", {
         scrollTrigger: {
           trigger: ".c-cta-footer-wrapper",
@@ -179,9 +237,24 @@ function referrals() {
         y: "5rem",
         ease: "quart.easeOut",
       });
+
+      gsap.to(".c-img-cta-footer.cc-three", {
+        scrollTrigger: {
+          trigger: ".c-cta-footer-wrapper",
+          start: "top 100%",
+          scrub: true,
+        },
+        scaleX: "780%",
+        scaleY: "780%",
+        x: "-10rem",
+        y: "5rem",
+        ease: "quart.easeOut",
+      });
     },
 
+    // Medium screens
     "(min-width: 768px) and (max-width: 991px)": function () {
+      // Growing IMG CTA Footer
       gsap.to(".c-img-cta-footer.cc-one", {
         scrollTrigger: {
           trigger: ".c-cta-footer-wrapper",
@@ -193,9 +266,37 @@ function referrals() {
         x: "21rem",
         ease: "quart.easeOut",
       });
+
+      gsap.to(".c-img-cta-footer.cc-two", {
+        scrollTrigger: {
+          trigger: ".c-cta-footer-wrapper",
+          start: "top 100%",
+          scrub: true,
+        },
+        scaleX: "600%",
+        scaleY: "600%",
+        x: "-10rem",
+        y: "5rem",
+        ease: "quart.easeOut",
+      });
+
+      gsap.to(".c-img-cta-footer.cc-three", {
+        scrollTrigger: {
+          trigger: ".c-cta-footer-wrapper",
+          start: "top 100%",
+          scrub: true,
+        },
+        scaleX: "380%",
+        scaleY: "380%",
+        x: "-10rem",
+        y: "5rem",
+        ease: "quart.easeOut",
+      });
     },
 
+    // Small screens
     "(max-width: 480px)": function () {
+      // Growing IMG CTA Footer
       gsap.to(".c-img-cta-footer.cc-one", {
         scrollTrigger: {
           trigger: ".c-cta-footer-wrapper",
@@ -205,6 +306,32 @@ function referrals() {
         scaleX: "200%",
         scaleY: "200%",
         x: "10rem",
+        ease: "quart.easeOut",
+      });
+
+      gsap.to(".c-img-cta-footer.cc-two", {
+        scrollTrigger: {
+          trigger: ".c-cta-footer-wrapper",
+          start: "top 100%",
+          scrub: true,
+        },
+        scaleX: "350%",
+        scaleY: "350%",
+        x: "-10rem",
+        y: "5rem",
+        ease: "quart.easeOut",
+      });
+
+      gsap.to(".c-img-cta-footer.cc-three", {
+        scrollTrigger: {
+          trigger: ".c-cta-footer-wrapper",
+          start: "top 100%",
+          scrub: true,
+        },
+        scaleX: "280%",
+        scaleY: "280%",
+        x: "0rem",
+        y: "5rem",
         ease: "quart.easeOut",
       });
     },
