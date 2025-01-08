@@ -95,7 +95,7 @@ function referrals() {
   }, {
     y: '0rem',
     delay: 1,
-    duration: 0.8,
+    duration: 0.4,
     opacity: 1,
   });
 
