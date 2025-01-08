@@ -99,6 +99,18 @@ function referrals() {
     opacity: 1,
   });
 
+
+//Animate Hero Image
+   gsap.fromTo(".referrals-hero-img", {
+    y: '-5rem',
+    opacity: 0.5
+  }, {
+    y: '0rem',
+    delay: 0.4,
+    duration: 0.8,
+    opacity: 1,
+  });
+  
   
 
   //Animate How it works
