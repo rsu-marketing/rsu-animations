@@ -101,14 +101,26 @@ function referrals() {
 
 
 //Animate Hero Image
-   gsap.fromTo(".referrals-hero-img", {
+
+gsap.fromTo(".referrals-hero-img", {
     y: '-5rem',
-    opacity: 0.5
+    opacity: 0
   }, {
     y: '0rem',
-    delay: 0.4,
-    duration: 0.8,
+    delay: 0.6,
+    duration: 1.2,
     opacity: 1,
+  });
+
+  gsap.to(".referrals-hero-img", {
+    scrollTrigger: {
+      trigger: ".referrals-hero-img",
+      start: "middle",
+      end: "bottom -10%",
+      scrub: true,
+    },
+    y: '-8rem',
+    ease: "quart.easeOut",
   });
   
   
