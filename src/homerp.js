@@ -5,7 +5,7 @@ import { SplitText } from "./gsap/all.js";
 
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
-function home() {
+function homerp() {
 
   // smooth scroll
   document.addEventListener('DOMContentLoaded', () => {
