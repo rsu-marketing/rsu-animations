@@ -30,6 +30,7 @@ import confirmation from './confirmation.js'
 import webinartemplate from './webinartemplate.js'
 import videotemplate from './videotemplate.js'
 import referrals from './referrals.js'
+import homerp from './homerp.js'
 
 let isHome = document.querySelector('body').classList.contains('body--home')
 if (isHome) {
@@ -166,3 +167,7 @@ if (isReferrals) {
   referrals()
 }
 
+let isHomerp = document.querySelector('body').classList.contains('body--homerp')
+if (isHomerp) {
+  homerp()
+}
