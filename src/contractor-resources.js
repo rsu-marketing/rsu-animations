@@ -12,4 +12,4 @@ function contractorResources() {
   // 5. Fast cards wrapper will only animate if .c-fast-cards-wrapper element exists
 }
 
-export default examplePage; 
+export default contractorResources; 
