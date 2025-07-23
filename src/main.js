@@ -30,7 +30,7 @@ import confirmation from './confirmation.js'
 import webinartemplate from './webinartemplate.js'
 import videotemplate from './videotemplate.js'
 import referrals from './referrals.js'
-
+import contractorResources from './contractor-resources.js'
 
 let isHome = document.querySelector('body').classList.contains('body--home')
 if (isHome) {
@@ -167,3 +167,7 @@ if (isReferrals) {
   referrals()
 }
 
+
+if (document.querySelector('body').classList.contains('body--contractor')) {
+  contractorResources()
+}

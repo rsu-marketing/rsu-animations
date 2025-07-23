@@ -2,6 +2,7 @@
 import { ScrollTrigger } from "./gsap/all.js";
 import { ScrollSmoother } from "./gsap/all.js";
 import { SplitText } from "./gsap/all.js";
+import yellowBallAnimation from "./yellowBallAnimation.js";
 
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
@@ -621,6 +622,9 @@ function home() {
   });
 
 
+  // Initialize yellow ball animation (global)
+  yellowBallAnimation();
+
   // responsive
 
   ScrollTrigger.matchMedia({
@@ -639,135 +643,13 @@ function home() {
         opacity: 1,
       });
 
-
-      // Anim fast yellow circle
-      // // SplitText 
-      // const splitText = new SplitText('.cc-split-chars', { type: 'words,chars' });
-
-      // // SplitText timeline
-      // const splitTextTl = gsap.timeline({paused: true});
-
-      // splitText.chars.forEach((char, index) => {
-      //   splitTextTl.from(char, {
-      //     opacity: 0,
-      //     y: 20,
-      //     duration: 0.015,
-      //     stagger: 0.01, 
-      //   });
-      // });
-
-      // splitTextTl.set('.cc-split-chars', { opacity: 0 });
-
-      const ball = document.querySelector('[yellow-ball]');
-      let scaleVal = document.documentElement.clientWidth / ball.getBoundingClientRect().width;
-      window.addEventListener('resize', () => document.documentElement.clientWidth / ball.getBoundingClientRect().width);
-
-      // timeline main (ballTl)
-      const ballTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '[yellow-ball-section]',
-          pin: true,
-          start: "top 10%",
-          end: '+=3000',
-          scrub: 0,
-        },
-        // onUpdate: () => {
-        //   // Start splitTextTl at the end of ballTl
-        //   splitTextTl.restart()
-        //   splitTextTl.set('.cc-split-chars', { opacity: 1 });
-        // },
-      });
-
-      // add animations to the main timeline (ballTl)
-      ballTl.to(ball, {
-        left: '100vw',
-        rotate: '360deg',
-        duration: 40,
-      });
-
-      ballTl.to(ball, {
-        scale: scaleVal * 2.5,
-        top: '50rem',
-        rotate: '270deg',
-        duration: 60,
-      }, '>');
-
-      ballTl.to('.c-fast-txt-wrapper.cc-one', {
-        opacity: 0,
-        duration: 30,
-      }, '<');
-
-      ballTl.to('.c-yellow-circle-bg', {
-        opacity: 0,
-        duration: 30,
-      }, '<');
-
-      ballTl.to('.c-bg-wrapper', {
-        backgroundColor: '#FFE985'
-      });
-
-      ballTl.to(ball, {
-        opacity: 0,
-      });
-
-      ballTl.to(".c-fast-cards-wrapper", {
-        opacity: 1,
-      });
-
-      ballTl.fromTo(".cc-split-chars", {
-        scale: 0,
-        opacity: 0
-      }, {
-        scale: 1,
-        duration: 6,
-        opacity: 1,
-      });
-
-      ballTl.fromTo(".swiper", {
-        scale: 0,
-        opacity: 0
-      }, {
-        scale: 1,
-        duration: 6,
-        opacity: 1,
-      });
-
-      const swiper = new Swiper(".swiper", {
-        effect: "cards",
-        grabCursor: true,
-        keyboard: true,
-      });
-
-      // Create a GSAP timeline for the swiper
-      var timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: "[yellow-ball-section]",
-          start: "top top",
-          end: "+=100%",
-          pin: true,
-          scrub: 1,
-          onUpdate: function (self) {
-            // Calculate the progression
-            const progressPerSlide = 1 / (swiper.slides.length - 1);
-            const index = Math.floor(self.progress / progressPerSlide);
-
-            // Change slide based on the progress
-            if (index !== swiper.activeIndex) {
-              swiper.slideTo(index);
-            }
-          },
-        },
-      });
-
-
       // Inject data testimonnial
-
       document.addEventListener("DOMContentLoaded", function () {
         const appendOne = document.querySelector("[appendOne]");
         const testimonialOne = document.querySelector("[testimonialOne]");
 
         // Vérifiez s'il existe au moins trois éléments dans testimonialOne
-        if (testimonialOne.children.length >= 2) {
+        if (testimonialOne && testimonialOne.children.length >= 2) {
           // Insérez l'élément avec l'attribut [appendOne] après le deuxième élément
           testimonialOne.insertBefore(appendOne, testimonialOne.children[2]);
         }
@@ -778,12 +660,11 @@ function home() {
         const testimonialTwo = document.querySelector("[testimonialTwo]");
 
         // Vérifiez s'il existe au moins trois éléments dans testimonialOne
-        if (testimonialTwo.children.length >= 1) {
+        if (testimonialTwo && testimonialTwo.children.length >= 1) {
           // Insérez l'élément avec l'attribut [appendOne] après le deuxième élément
           testimonialTwo.insertBefore(appendTwo, testimonialTwo.children[1]);
         }
       });
-
 
       // MARQUEE ON SCROLL
 
@@ -851,136 +732,13 @@ function home() {
         opacity: 1,
       });
 
-      // hero 
-
-
-      // Anim fast yellow circle
-      // SplitText 
-      // const splitText = new SplitText('.cc-split-chars', { type: 'words,chars' });
-
-      // SplitText timeline
-      // const splitTextTl = gsap.timeline({paused: true});
-
-      // splitText.chars.forEach((char, index) => {
-      //   splitTextTl.from(char, {
-      //     opacity: 0,
-      //     y: 20,
-      //     duration: 0.015,
-      //     stagger: 0.01, 
-      //   });
-      // });
-
-      // splitTextTl.set('.cc-split-chars', { opacity: 0 });
-
-      const ball = document.querySelector('[yellow-ball]');
-      let scaleVal = document.documentElement.clientWidth / ball.getBoundingClientRect().width;
-      window.addEventListener('resize', () => document.documentElement.clientWidth / ball.getBoundingClientRect().width);
-
-      // timeline main (ballTl)
-      const ballTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '[yellow-ball-section]',
-          pin: true,
-          start: "top 10%",
-          end: '+=3000',
-          scrub: 0,
-        },
-        // onUpdate: () => {
-        //   // Start splitTextTl at the end of ballTl
-        //   splitTextTl.restart()
-        //   splitTextTl.set('.cc-split-chars', { opacity: 1 });
-        // },
-      });
-
-      // add animations to the main timeline (ballTl)
-      ballTl.to(ball, {
-        left: '100vw',
-        rotate: '360deg',
-        duration: 40,
-      });
-
-      ballTl.to(ball, {
-        scale: scaleVal * 2.5,
-        top: '50rem',
-        rotate: '270deg',
-        duration: 60,
-      }, '>');
-
-      ballTl.to('.c-fast-txt-wrapper.cc-one', {
-        opacity: 0,
-        duration: 30,
-      }, '<');
-
-      ballTl.to('.c-yellow-circle-bg', {
-        opacity: 0,
-        duration: 30,
-      }, '<');
-
-      ballTl.to('.c-bg-wrapper', {
-        backgroundColor: '#FFE985'
-      });
-
-      ballTl.to(ball, {
-        opacity: 0,
-      });
-
-      ballTl.to(".c-fast-cards-wrapper", {
-        opacity: 1,
-      });
-
-      ballTl.fromTo(".cc-split-chars", {
-        scale: 0,
-        opacity: 0
-      }, {
-        scale: 1,
-        duration: 6,
-        opacity: 1,
-      });
-
-      ballTl.fromTo(".swiper", {
-        scale: 0,
-        opacity: 0
-      }, {
-        scale: 1,
-        duration: 6,
-        opacity: 1,
-      });
-
-      const swiper = new Swiper(".swiper", {
-        effect: "cards",
-        grabCursor: true,
-        keyboard: true,
-      });
-
-      // Create a GSAP timeline for the swiper
-      var timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: "[yellow-ball-section]",
-          start: "top top",
-          end: "+=100%",
-          pin: true,
-          scrub: 1,
-          onUpdate: function (self) {
-            // Calculate the progression
-            const progressPerSlide = 1 / (swiper.slides.length - 1);
-            const index = Math.floor(self.progress / progressPerSlide);
-
-            // Change slide based on the progress
-            if (index !== swiper.activeIndex) {
-              swiper.slideTo(index);
-            }
-          },
-        },
-      });
-
       // Inject data testimonial
-
       document.addEventListener("DOMContentLoaded", function () {
         const appendOne = document.querySelector("[appendOne]");
         const testimonialOne = document.querySelector("[testimonialOne]");
 
         // Vérifiez s'il existe au moins trois éléments dans testimonialOne
-        if (testimonialOne.children.length >= 2) {
+        if (testimonialOne && testimonialOne.children.length >= 2) {
           // Insérez l'élément avec l'attribut [appendOne] après le deuxième élément
           testimonialOne.insertBefore(appendOne, testimonialOne.children[2]);
         }
@@ -991,7 +749,7 @@ function home() {
         const testimonialTwo = document.querySelector("[testimonialTwo]");
 
         // Vérifiez s'il existe au moins trois éléments dans testimonialOne
-        if (testimonialTwo.children.length >= 1) {
+        if (testimonialTwo && testimonialTwo.children.length >= 1) {
           // Insérez l'élément avec l'attribut [appendOne] après le deuxième élément
           testimonialTwo.insertBefore(appendTwo, testimonialTwo.children[1]);
         }
@@ -1063,136 +821,13 @@ function home() {
         opacity: 1,
       });
 
-      // hero 
-
-
-      // Anim fast yellow circle
-      // // SplitText 
-      // const splitText = new SplitText('.cc-split-chars', { type: 'words,chars' });
-
-      // // SplitText timeline
-      // const splitTextTl = gsap.timeline({paused: true});
-
-      // splitText.chars.forEach((char, index) => {
-      //   splitTextTl.from(char, {
-      //     opacity: 0,
-      //     y: 20,
-      //     duration: 0.015,
-      //     stagger: 0.01, 
-      //   });
-      // });
-
-      // splitTextTl.set('.cc-split-chars', { opacity: 0 });
-
-      const ball = document.querySelector('[yellow-ball]');
-      let scaleVal = document.documentElement.clientWidth / ball.getBoundingClientRect().width;
-      window.addEventListener('resize', () => document.documentElement.clientWidth / ball.getBoundingClientRect().width);
-
-      // timeline main (ballTl)
-      const ballTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '[yellow-ball-section]',
-          pin: true,
-          start: "top 10%",
-          end: '+=1000',
-          scrub: 0,
-        },
-        // onComplete: () => {
-        //   // Start splitTextTl at the end of ballTl
-        //   splitTextTl.play()
-        //   splitTextTl.set('.cc-split-chars', { opacity: 1 });
-        // },
-      });
-
-      // add animations to the main timeline (ballTl)
-      ballTl.to(ball, {
-        left: '100vw',
-        rotate: '360deg',
-        duration: 40,
-      });
-
-      ballTl.to(ball, {
-        scale: scaleVal * 4.5,
-        top: '50rem',
-        rotate: '270deg',
-        duration: 60,
-      }, '>');
-
-      ballTl.to('.c-fast-txt-wrapper.cc-one', {
-        opacity: 0,
-        duration: 30,
-      }, '<');
-
-      ballTl.to('.c-yellow-circle-bg', {
-        opacity: 0,
-        duration: 30,
-      }, '<');
-
-      ballTl.to('.c-bg-wrapper', {
-        backgroundColor: '#FFE985'
-      });
-
-      ballTl.to(ball, {
-        opacity: 0,
-      });
-
-      ballTl.to(".c-fast-cards-wrapper", {
-        opacity: 1,
-      });
-
-      ballTl.fromTo(".cc-split-chars", {
-        scale: 0,
-        opacity: 0
-      }, {
-        scale: 1,
-        duration: 6,
-        opacity: 1,
-      });
-
-      ballTl.fromTo(".swiper", {
-        scale: 0,
-        opacity: 0
-      }, {
-        scale: 1,
-        duration: 40,
-        opacity: 1,
-      });
-
-      const swiper = new Swiper(".swiper", {
-        effect: "cards",
-        grabCursor: true,
-        keyboard: true,
-      });
-
-      // Create a GSAP timeline for the swiper
-      var timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: "[yellow-ball-section]",
-          start: "top top",
-          end: "+=300",
-          pin: true,
-          scrub: 1,
-          onUpdate: function (self) {
-            // Calculate the progression
-            const progressPerSlide = 1 / (swiper.slides.length - 1);
-            const index = Math.floor(self.progress / progressPerSlide);
-
-            // Change slide based on the progress
-            if (index !== swiper.activeIndex) {
-              swiper.slideTo(index);
-            }
-          },
-        },
-      });
-
       // Inject data testimonial
-
       document.addEventListener("DOMContentLoaded", function () {
         const appendOne = document.querySelector("[appendOne]");
         const testimonialOne = document.querySelector("[testimonialOne]");
 
         // Vérifiez s'il existe au moins trois éléments dans testimonialOne
-        if (testimonialOne.children.length >= 2) {
+        if (testimonialOne && testimonialOne.children.length >= 2) {
           // Insérez l'élément avec l'attribut [appendOne] après le deuxième élément
           testimonialOne.insertBefore(appendOne, testimonialOne.children[2]);
         }
@@ -1203,7 +838,7 @@ function home() {
         const testimonialTwo = document.querySelector("[testimonialOne]");
 
         // Vérifiez s'il existe au moins trois éléments dans testimonialOne
-        if (testimonialTwo.children.length >= 3) {
+        if (testimonialTwo && testimonialTwo.children.length >= 3) {
           // Insérez l'élément avec l'attribut [appendOne] après le deuxième élément
           testimonialTwo.insertBefore(appendTwo, testimonialTwo.children[1]);
         }
