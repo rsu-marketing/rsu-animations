@@ -1,6 +1,7 @@
 //import gsap from '../dist/gsap.js';
 
 import { ScrollTrigger, ScrollSmoother } from "./gsap/all.js";
+import { initSharedAnimations } from "./sharedAnimations.js";
 
 
 import home from './home.js'
@@ -171,3 +172,6 @@ if (isReferrals) {
 if (document.querySelector('body').classList.contains('body--contractor')) {
   contractorResources()
 }
+
+// Initialize shared animations on all pages
+initSharedAnimations();
