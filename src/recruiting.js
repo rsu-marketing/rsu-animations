@@ -167,14 +167,6 @@ function recruiting() {
     // large
     "(min-width: 992px)": function () {
 
-      // sticky section
-
-      let st = ScrollTrigger.create({
-        trigger: ".c-sticky-wrapper",
-        pin: ".c-sticky-left-wrapper",
-        start: "top center",
-        end: "bottom 80%",
-      });
 
 
       // growing img cta footer
@@ -194,14 +186,6 @@ function recruiting() {
     // medium
     "(min-width: 767px) and (max-width: 991px)": function () {
 
-      // sticky section
-
-      let st = ScrollTrigger.create({
-        trigger: ".c-sticky-wrapper",
-        pin: ".c-sticky-left-wrapper",
-        start: "top center",
-        end: "bottom 80%",
-      });
 
       // growing img cta footer
 

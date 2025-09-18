@@ -974,17 +974,7 @@ function home() {
 
 
 
-          // STICKY SECTION
-
-      let st = ScrollTrigger.create({
-        trigger: ".c-sticky-wrapper",
-        pin: ".c-sticky-left-wrapper",
-        start: "top center",
-        end: "bottom 78%",
-      });
-
-          
-
+  
       // GROWING IMG CTA FOOTER
 
       gsap.to(".c-img-cta-footer.cc-one", {

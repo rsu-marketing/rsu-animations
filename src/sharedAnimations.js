@@ -228,10 +228,44 @@ export function footerCtaAnimation() {
   });
 }
 
+// Sticky Left Wrapper Animation
+export function stickyLeftWrapperAnimation() {
+  const stickyWrapper = document.querySelector(".c-sticky-wrapper");
+  const stickyLeftWrapper = document.querySelector(".c-sticky-left-wrapper");
+
+  if (!stickyWrapper || !stickyLeftWrapper) return;
+
+  ScrollTrigger.matchMedia({
+    // large
+    "(min-width: 992px)": function () {
+      ScrollTrigger.create({
+        trigger: ".c-sticky-wrapper",
+        pin: ".c-sticky-left-wrapper",
+        start: "top center",
+        end: "bottom 80%",
+      });
+    },
+    // medium
+    "(min-width: 768px) and (max-width: 991px)": function () {
+      ScrollTrigger.create({
+        trigger: ".c-sticky-wrapper",
+        pin: ".c-sticky-left-wrapper",
+        start: "top center",
+        end: "bottom 80%",
+      });
+    },
+    // small - no sticky animation on mobile
+    "(max-width: 480px)": function () {
+      // No sticky animation on mobile screens
+    }
+  });
+}
+
 // Initialize all shared animations
 export function initSharedAnimations() {
   logoGridAnimation();
   testimonialsAnimation();
   footerCtaAnimation();
   splitTextAnimation();
+  stickyLeftWrapperAnimation();
 }

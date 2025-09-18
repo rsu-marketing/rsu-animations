@@ -215,16 +215,6 @@ function talent() {
     // large
     "(min-width: 992px)": function () {
 
-      // STICKY SECTION
-
-      let st = ScrollTrigger.create({
-        trigger: ".c-sticky-wrapper",
-        pin: ".c-sticky-left-wrapper",
-        start: "top center",
-        end: "bottom 78%",
-      });
-
-
       // growing img cta footer
 
       gsap.to(".c-img-cta-footer.cc-circle-alone", {
@@ -242,16 +232,6 @@ function talent() {
     },
     // medium
     "(min-width: 768px) and (max-width: 991px)": function () {
-
-      // STICKY SECTION
-
-      let st = ScrollTrigger.create({
-        trigger: ".c-sticky-wrapper",
-        pin: ".c-sticky-left-wrapper",
-        start: "top center",
-        end: "bottom 78%",
-      });
-
 
       // growing img cta footer
 

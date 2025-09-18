@@ -246,12 +246,6 @@ function freelancing() {
     // large
     "(min-width: 992px)": function () {
 
-      let st = ScrollTrigger.create({
-        trigger: ".c-sticky-wrapper",
-        pin: ".c-sticky-left-wrapper",
-        start: "top center",
-        end: "bottom 100%",
-      });
 
       // GROWING IMG CTA FOOTER
 
@@ -297,12 +291,6 @@ function freelancing() {
     "(min-width: 768px) and (max-width: 991px)": function () {
       // sticky section
 
-      let st = ScrollTrigger.create({
-        trigger: ".c-sticky-wrapper",
-        pin: ".c-sticky-left-wrapper",
-        start: "top center",
-        end: "bottom 100%",
-      });
 
 
       // GROWING IMG CTA FOOTER

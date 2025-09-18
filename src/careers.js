@@ -410,41 +410,6 @@ function careers() {
       });
 
 
-      // sticky section
-
-      let st = ScrollTrigger.create({
-        trigger: ".c-sticky-wrapper",
-        pin: ".c-sticky-left-wrapper",
-        start: "top center",
-        end: "bottom 80%",
-      });
-
-    },
-    // medium
-    "(min-width: 768px) and (max-width: 991px)": function () {
-
-      // growing img cta footer
-
-      gsap.to(".c-img-cta-footer.cc-circle-alone", {
-        scrollTrigger: {
-          trigger: ".c-cta-footer-wrapper",
-          start: "top 100%",
-          scrub: true,
-          end: "bottom 80%"
-        },
-        y: "-39rem",
-        ease: "quart.easeOut",
-      });
-
-
-      // sticky section
-
-      let st = ScrollTrigger.create({
-        trigger: ".c-sticky-wrapper",
-        pin: ".c-sticky-left-wrapper",
-        start: "top center",
-        end: "bottom 80%",
-      });
 
     },
     // small
