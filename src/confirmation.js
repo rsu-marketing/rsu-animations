@@ -1,9 +1,8 @@
 //import gsap from "../dist/gsap.js";
 import { ScrollTrigger } from "./gsap/all.js";
 import { ScrollSmoother } from "./gsap/all.js";
-import { SplitText } from "./gsap/all.js";
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 function confirmation() {
 
 

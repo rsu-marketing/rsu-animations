@@ -1,4 +1,5 @@
 import { ScrollTrigger } from "./gsap/all.js";
+import { SplitText } from "./gsap/all.js";
 
 // Logo Grid Animation
 export function logoGridAnimation() {
@@ -48,19 +49,92 @@ export function testimonialsAnimation() {
   const testimonials = document.querySelectorAll(".c-testimonial-container");
   if (testimonials.length === 0) return;
 
-  testimonials.forEach((element, index) => {
-    gsap.from(element, {
-      opacity: 0,
-      y: "6.25rem",
-      duration: 1,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: element,
-        start: "top 80%",
-        toggleActions: "play none none reverse",
-        stagger: 0.2 * index
-      }
+  // Wrap in load event to ensure DOM is ready and handle dynamic content
+  window.addEventListener('load', function () {
+    testimonials.forEach((element, index) => {
+      gsap.from(element, {
+        opacity: 0,
+        y: "6.25rem",
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: element,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+          stagger: 0.2 * index
+        }
+      });
     });
+
+    // Refresh ScrollTrigger after setting up animations
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+  });
+}
+
+// CC-Split Text Animation
+export function splitTextAnimation() {
+  // Handle multiple cc-split variants found across different pages
+  const splitSelectors = [
+    '.cc-split',
+    '.cc-split-one',
+    '.cc-split-two'
+  ];
+
+  splitSelectors.forEach(selector => {
+    const elements = document.querySelectorAll(selector);
+    if (elements.length === 0) return;
+
+    function setupSplits() {
+      elements.forEach(element => {
+        // Reset if needed
+        if (element.anim) {
+          element.anim.progress(1).kill();
+          element.split.revert();
+        }
+
+        element.split = new SplitText(element, {
+          type: "lines,words,chars",
+          linesClass: "split-line"
+        });
+
+        // Set up the animation with slight variation based on selector
+        const isSimpleSplit = selector === '.cc-split';
+        const animationConfig = isSimpleSplit ? {
+          targets: element.split.words,
+          duration: 0.5,
+          opacity: 0,
+          y: 5,
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: element,
+            toggleActions: "play none none reverse",
+            start: "top 80%",
+          }
+        } : {
+          targets: element.split.words,
+          opacity: 0.15,
+          duration: 0.2,
+          ease: 'none',
+          stagger: 0.2,
+          scrollTrigger: {
+            trigger: element,
+            start: "top 80%",
+            end: "bottom",
+            scrub: true,
+          }
+        };
+
+        element.anim = gsap.from(animationConfig.targets, {
+          ...animationConfig
+        });
+      });
+    }
+
+    // Initialize and set up refresh listener
+    setupSplits();
+    ScrollTrigger.addEventListener("refresh", setupSplits);
   });
 }
 
@@ -159,4 +233,5 @@ export function initSharedAnimations() {
   logoGridAnimation();
   testimonialsAnimation();
   footerCtaAnimation();
+  splitTextAnimation();
 }

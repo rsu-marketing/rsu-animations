@@ -111,25 +111,7 @@ function about() {
   });
 
 
-  // splittext
-
-  let aboutText = new SplitText('.cc-split', {
-    type: 'words'
-  })
-
-  gsap.from(aboutText.words, {
-    opacity: 0.15,
-    duration: 0.2,
-    ease: 'none',
-    stagger: 0.2,
-    scrollTrigger: {
-      trigger: '.cc-split',
-      start: "top 80%",
-      end: "bot ",
-      scrub: true,
-    }
-  })
-
+  
   // Move author
 
   gsap.fromTo(".c-author-wrapper", {

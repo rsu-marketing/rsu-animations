@@ -1,9 +1,8 @@
 //import gsap from "../dist/gsap.js";
 import { ScrollTrigger } from "./gsap/all.js";
 import { ScrollSmoother } from "./gsap/all.js";
-import { SplitText } from "./gsap/all.js";
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 function careers() {
 
   // smooth scroll
@@ -88,35 +87,6 @@ function careers() {
     }
   });
 
-
-  // ANIM COMMENT ONE
-
-  // anim comment splittext
-
-  function setupSplits(className, triggerStart, triggerEnd) {
-    let elements = gsap.utils.toArray(className);
-
-    elements.forEach((element) => {
-      let SplitClient = new SplitText(element, { type: "lines" });
-      let lines = SplitClient.lines;
-      gsap.from(lines, {
-        duration: 0.4,
-        opacity: 0,
-        y: 10,
-        ease: "none",
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: element,
-          start: triggerStart,
-          end: triggerEnd,
-          scrub: true
-        }
-      });
-    });
-  }
-
-  setupSplits(".cc-split-one", "top 90%", "bottom 90%");
-  setupSplits(".cc-split-two", "top 90%", "bottom 90%");
 
   // Anim author wrapper
 

@@ -1,10 +1,9 @@
 //import gsap from "../dist/gsap.js";
 import { ScrollTrigger } from "./gsap/all.js";
 import { ScrollSmoother } from "./gsap/all.js";
-import { SplitText } from "./gsap/all.js";
 
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 function recruiting() {
 
   // smooth scroll
@@ -91,43 +90,6 @@ function recruiting() {
       toggleActions: "play none none reverse",
     }
   });
-
-  // footer animation
-
-  // footer cta 
-
-  const quotes = document.querySelectorAll(".cc-split");
-
-  function setupSplits() {
-    quotes.forEach(quote => {
-      // Reset if needed
-      if (quote.anim) {
-        quote.anim.progress(1).kill();
-        quote.split.revert();
-      }
-
-      quote.split = new SplitText(quote, {
-        type: "lines,words,chars",
-        linesClass: "split-line"
-      });
-
-      // Set up the anim
-      quote.anim = gsap.from(quote.split.chars, {
-        scrollTrigger: {
-          trigger: quote,
-          toggleActions: "play none none reverse",
-          start: "top 80%",
-        },
-        duration: 0.5,
-        opacity: 0,
-        y: 5,
-        stagger: 0.05,
-      });
-    });
-  }
-
-  ScrollTrigger.addEventListener("refresh", setupSplits);
-  setupSplits();
 
   // footer chart anim
 
