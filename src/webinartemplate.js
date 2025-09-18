@@ -2,6 +2,7 @@
 import { ScrollTrigger } from "./gsap/all.js";
 import { ScrollSmoother } from "./gsap/all.js";
 import { SplitText } from "./gsap/all.js";
+import { initSharedAnimations } from "./sharedAnimations.js";
 
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
@@ -133,6 +134,9 @@ function webinartemplate() {
         y: '-3rem',
         ease: "quart.easeOut",
     });
+
+  // Initialize shared animations
+  initSharedAnimations();
 
 }
 

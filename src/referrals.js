@@ -1,5 +1,6 @@
 //import gsap from "../dist/gsap.js";
 import { ScrollTrigger, ScrollSmoother, SplitText } from "./gsap/all.js";
+import { initSharedAnimations } from "./sharedAnimations.js";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
@@ -379,6 +380,10 @@ gsap.fromTo(".referrals-hero-img", {
       });
     },
   });
+
+  // Initialize shared animations
+  initSharedAnimations();
+
 }
 
 export default referrals;

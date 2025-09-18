@@ -2,6 +2,7 @@
 import { ScrollTrigger } from "./gsap/all.js";
 import { ScrollSmoother } from "./gsap/all.js";
 import { SplitText } from "./gsap/all.js";
+import { initSharedAnimations } from "./sharedAnimations.js";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 function about() {
@@ -261,135 +262,21 @@ function about() {
     // large
     "(min-width: 992px)": function () {
 
-      // GROWING IMG CTA FOOTER
-
-      gsap.to(".c-img-cta-footer.cc-one", {
-        scrollTrigger: {
-          trigger: ".c-cta-footer-wrapper",
-          start: "top 100%",
-          scrub: true,
-        },
-        scaleX: '300%',
-        scaleY: '300%',
-        x: "21rem",
-        ease: "quart.easeOut",
-      });
-
-      gsap.to(".c-img-cta-footer.cc-two", {
-        scrollTrigger: {
-          trigger: ".c-cta-footer-wrapper",
-          start: "top 100%",
-          scrub: true,
-        },
-        scaleX: '900%',
-        scaleY: '900%',
-        x: "-20rem",
-        y: "5rem",
-        ease: "quart.easeOut",
-      });
-
-      gsap.to(".c-img-cta-footer.cc-three", {
-        scrollTrigger: {
-          trigger: ".c-cta-footer-wrapper",
-          start: "top 100%",
-          scrub: true,
-        },
-        scaleX: '780%',
-        scaleY: '780%',
-        x: "-10rem",
-        y: "5rem",
-        ease: "quart.easeOut",
-      });
-    },
+          },
     // medium
     "(min-width: 768px) and (max-width: 991px)": function () {
 
-      // GROWING IMG CTA FOOTER
-
-      gsap.to(".c-img-cta-footer.cc-one", {
-        scrollTrigger: {
-          trigger: ".c-cta-footer-wrapper",
-          start: "top 100%",
-          scrub: true,
-        },
-        scaleX: '400%',
-        scaleY: '400%',
-        x: "21rem",
-        ease: "quart.easeOut",
-      });
-
-      gsap.to(".c-img-cta-footer.cc-two", {
-        scrollTrigger: {
-          trigger: ".c-cta-footer-wrapper",
-          start: "top 100%",
-          scrub: true,
-        },
-        scaleX: '600%',
-        scaleY: '600%',
-        x: "-10rem",
-        y: "5rem",
-        ease: "quart.easeOut",
-      });
-
-      gsap.to(".c-img-cta-footer.cc-three", {
-        scrollTrigger: {
-          trigger: ".c-cta-footer-wrapper",
-          start: "top 100%",
-          scrub: true,
-        },
-        scaleX: '380%',
-        scaleY: '380%',
-        x: "-10rem",
-        y: "5rem",
-        ease: "quart.easeOut",
-      });
-    },
+          },
     // small
     "(max-width: 480px)": function () {
 
 
-      // GROWING IMG CTA FOOTER
-
-      gsap.to(".c-img-cta-footer.cc-one", {
-        scrollTrigger: {
-          trigger: ".c-cta-footer-wrapper",
-          start: "top 100%",
-          scrub: true,
-        },
-        scaleX: '200%',
-        scaleY: '200%',
-        x: "10rem",
-        ease: "quart.easeOut",
-      });
-
-      gsap.to(".c-img-cta-footer.cc-two", {
-        scrollTrigger: {
-          trigger: ".c-cta-footer-wrapper",
-          start: "top 100%",
-          scrub: true,
-        },
-        scaleX: '350%',
-        scaleY: '350%',
-        x: "-10rem",
-        y: "5rem",
-        ease: "quart.easeOut",
-      });
-
-      gsap.to(".c-img-cta-footer.cc-three", {
-        scrollTrigger: {
-          trigger: ".c-cta-footer-wrapper",
-          start: "top 100%",
-          scrub: true,
-        },
-        scaleX: '280%',
-        scaleY: '280%',
-        x: "0rem",
-        y: "5rem",
-        ease: "quart.easeOut",
-      });
-
+      
     },
   })
+
+  // Initialize shared animations
+  initSharedAnimations();
 
 }
 
