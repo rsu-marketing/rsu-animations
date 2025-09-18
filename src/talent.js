@@ -91,34 +91,7 @@ function talent() {
     }
   });
 
-  //swiper
-  const swiper = new Swiper(".swiper", {
-    effect: "cards",
-    grabCursor: true,
-    keyboard: true,
-  });
-
-  // Create a GSAP timeline for the swiper
-  var timeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".c-swiper-free-wrapper",
-      start: "top top",
-      end: "+=100%",
-      pin: true,
-      scrub: 1,
-      onUpdate: function (self) {
-        // Calculate the progression
-        const progressPerSlide = 1 / (swiper.slides.length - 1);
-        const index = Math.floor(self.progress / progressPerSlide);
-
-        // Change slide based on the progress
-        if (index !== swiper.activeIndex) {
-          swiper.slideTo(index);
-        }
-      },
-    },
-  });
-
+  
 
 
   // TESTIMONIAL ANIMATION

@@ -123,35 +123,7 @@ function freelancing() {
     }
   });
 
-  //swiper
-
-  const swiper = new Swiper(".swiper.cc-talent", {
-    effect: "cards",
-    grabCursor: true,
-    keyboard: true,
-  });
-
-  // Create a GSAP timeline for the swiper
-  var timeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".c-swiper-free-wrapper.cc-talent",
-      start: "top top",
-      end: "+=100%",
-      pin: true,
-      scrub: 1,
-      onUpdate: function (self) {
-        // Calculate the progression
-        const progressPerSlide = 1 / (swiper.slides.length - 1);
-        const index = Math.floor(self.progress / progressPerSlide);
-
-        // Change slide based on the progress
-        if (index !== swiper.activeIndex) {
-          swiper.slideTo(index);
-        }
-      },
-    },
-  });
-
+  
   // ANIMATION TALENT NETWORK
 
   window.addEventListener('load', function () {
@@ -336,35 +308,7 @@ function freelancing() {
     // small
     "(max-width: 480px)": function () {
 
-      //swiper
-
-      const swiper = new Swiper(".swiper.cc-mob", {
-        effect: "cards",
-        grabCursor: true,
-        keyboard: true,
-      });
-
-      // Create a GSAP timeline for the swiper
-      var timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".c-swiper-free-wrapper.cc-mob",
-          start: "top 10%",
-          end: "+=100%",
-          pin: true,
-          scrub: 1,
-          onUpdate: function (self) {
-            // Calculate the progression
-            const progressPerSlide = 1 / (swiper.slides.length - 1);
-            const index = Math.floor(self.progress / progressPerSlide);
-
-            // Change slide based on the progress
-            if (index !== swiper.activeIndex) {
-              swiper.slideTo(index);
-            }
-          },
-        },
-      });
-      // GROWING IMG CTA FOOTER
+            // GROWING IMG CTA FOOTER
 
       gsap.to(".c-img-cta-footer.cc-one", {
         scrollTrigger: {

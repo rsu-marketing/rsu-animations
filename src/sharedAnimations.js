@@ -261,6 +261,70 @@ export function stickyLeftWrapperAnimation() {
   });
 }
 
+// Swiper Animation
+export function swiperAnimation() {
+  // Support multiple swiper variants found across different pages
+  const swiperConfigs = [
+    {
+      swiperSelector: '.swiper.cc-talent',
+      wrapperSelector: '.c-swiper-free-wrapper.cc-talent'
+    },
+    {
+      swiperSelector: '.swiper',
+      wrapperSelector: '.c-swiper-free-wrapper'
+    },
+    {
+      swiperSelector: '.swiper.cc-mob',
+      wrapperSelector: '.c-swiper-free-wrapper.cc-mob'
+    }
+  ];
+
+  swiperConfigs.forEach(config => {
+    const swiperElement = document.querySelector(config.swiperSelector);
+    const wrapperElement = document.querySelector(config.wrapperSelector);
+
+    if (!swiperElement || !wrapperElement) return;
+
+    // Check if Swiper library is available
+    if (typeof Swiper === 'undefined') {
+      console.warn('Swiper library not loaded. Skipping swiper animation for:', config.swiperSelector);
+      return;
+    }
+
+    // Initialize Swiper
+    const swiper = new Swiper(config.swiperSelector, {
+      effect: "cards",
+      grabCursor: true,
+      keyboard: true,
+    });
+
+    // Determine start position based on swiper type
+    const isMobileSwiper = config.swiperSelector === '.swiper.cc-mob';
+    const startPosition = isMobileSwiper ? "top 10%" : "top top";
+
+    // Create GSAP timeline for scroll-controlled swiper
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: config.wrapperSelector,
+        start: startPosition,
+        end: "+=100%",
+        pin: true,
+        scrub: 1,
+        onUpdate: function (self) {
+          // Calculate the progression
+          const progressPerSlide = 1 / (swiper.slides.length - 1);
+          const index = Math.floor(self.progress / progressPerSlide);
+
+          // Change slide based on the progress
+          if (index !== swiper.activeIndex) {
+            swiper.slideTo(index);
+          }
+        },
+      },
+    });
+  });
+}
+
 // Initialize all shared animations
 export function initSharedAnimations() {
   logoGridAnimation();
@@ -268,4 +332,5 @@ export function initSharedAnimations() {
   footerCtaAnimation();
   splitTextAnimation();
   stickyLeftWrapperAnimation();
+  swiperAnimation();
 }
