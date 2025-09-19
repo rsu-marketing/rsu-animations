@@ -311,9 +311,12 @@ export function swiperAnimation() {
         pin: true,
         scrub: 1,
         onUpdate: function (self) {
-          // Calculate the progression
-          const progressPerSlide = 1 / (swiper.slides.length - 1);
-          const index = Math.floor(self.progress / progressPerSlide);
+          // Safety check for swiper and slides
+          if (!swiper || !swiper.slides || swiper.slides.length === 0) return;
+
+          // Calculate the progression safely
+          const progressPerSlide = 1 / Math.max(swiper.slides.length - 1, 1);
+          const index = Math.min(Math.floor(self.progress / progressPerSlide), swiper.slides.length - 1);
 
           // Change slide based on the progress
           if (index !== swiper.activeIndex) {
