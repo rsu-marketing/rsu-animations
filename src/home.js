@@ -1,7 +1,4 @@
-//import gsap from "../dist/gsap.js";
-import { ScrollTrigger } from "./gsap/all.js";
-import { ScrollSmoother } from "./gsap/all.js";
-import { SplitText } from "./gsap/all.js";
+import { gsap, ScrollTrigger, ScrollSmoother, SplitText } from "./gsap/all.js";
 import yellowBallAnimation from "./yellowBallAnimation.js";
 
 
