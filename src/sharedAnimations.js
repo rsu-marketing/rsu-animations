@@ -53,69 +53,66 @@ export function testimonialsAnimation() {
   const testimonials = document.querySelectorAll('.c-testimonial-container');
   if (testimonials.length === 0) return;
 
-  // Setup testimonials animation with responsive breakpoints
-  function setupTestimonialAnimations() {
-    ScrollTrigger.matchMedia({
-      // large
-      '(min-width: 992px)': function () {
-        testimonials.forEach((element, index) => {
-          gsap.from(element, {
-            opacity: 0,
-            y: '6.25rem',
-            duration: 1,
-            delay: index * 0.2,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: element,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
-            },
-          });
-        });
-      },
-      // medium
-      '(min-width: 768px) and (max-width: 991px)': function () {
-        testimonials.forEach((element, index) => {
-          gsap.from(element, {
-            opacity: 0,
-            y: '5rem',
-            duration: 0.9,
-            delay: index * 0.15,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: element,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
-            },
-          });
-        });
-      },
-      // small
-      '(max-width: 480px)': function () {
-        testimonials.forEach((element, index) => {
-          gsap.from(element, {
-            opacity: 0,
-            y: '4rem',
-            duration: 0.8,
-            delay: index * 0.1,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: element,
-              start: 'top 90%',
-              toggleActions: 'play none none reverse',
-            },
-          });
-        });
-      },
-    });
-  }
+  // Set initial state immediately
+  gsap.set(testimonials, {
+    opacity: 0,
+    y: '6.25rem',
+  });
 
-  // Wait for DOM to be ready before setting up animations
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupTestimonialAnimations);
-  } else {
-    setupTestimonialAnimations();
-  }
+  // Setup testimonials animation with responsive breakpoints
+  ScrollTrigger.matchMedia({
+    // large
+    '(min-width: 992px)': function () {
+      testimonials.forEach((element, index) => {
+        gsap.to(element, {
+          opacity: 1,
+          y: '0rem',
+          duration: 1,
+          delay: index * 0.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      });
+    },
+    // medium
+    '(min-width: 768px) and (max-width: 991px)': function () {
+      testimonials.forEach((element, index) => {
+        gsap.to(element, {
+          opacity: 1,
+          y: '0rem',
+          duration: 0.9,
+          delay: index * 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      });
+    },
+    // small
+    '(max-width: 480px)': function () {
+      testimonials.forEach((element, index) => {
+        gsap.to(element, {
+          opacity: 1,
+          y: '0rem',
+          duration: 0.8,
+          delay: index * 0.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 90%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      });
+    },
+  });
 }
 
 // CC-Split Text Animation
