@@ -61,8 +61,8 @@ export function testimonialsAnimation() {
         gsap.from(element, {
           opacity: 0,
           y: '6.25rem',
-          duration: 1,
-          delay: index * 0.2,
+          duration: 0.8,
+          delay: index * 0.1,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: element,
@@ -78,8 +78,8 @@ export function testimonialsAnimation() {
         gsap.from(element, {
           opacity: 0,
           y: '5rem',
-          duration: 0.9,
-          delay: index * 0.15,
+          duration: 0.7,
+          delay: index * 0.08,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: element,
@@ -95,8 +95,8 @@ export function testimonialsAnimation() {
         gsap.from(element, {
           opacity: 0,
           y: '4rem',
-          duration: 0.8,
-          delay: index * 0.1,
+          duration: 0.6,
+          delay: index * 0.05,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: element,
