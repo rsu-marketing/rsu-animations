@@ -53,20 +53,14 @@ export function testimonialsAnimation() {
   const testimonials = document.querySelectorAll('.c-testimonial-container');
   if (testimonials.length === 0) return;
 
-  // Set initial state immediately
-  gsap.set(testimonials, {
-    opacity: 0,
-    y: '6.25rem',
-  });
-
   // Setup testimonials animation with responsive breakpoints
   ScrollTrigger.matchMedia({
     // large
     '(min-width: 992px)': function () {
       testimonials.forEach((element, index) => {
-        gsap.to(element, {
-          opacity: 1,
-          y: '0rem',
+        gsap.from(element, {
+          opacity: 0,
+          y: '6.25rem',
           duration: 1,
           delay: index * 0.2,
           ease: 'power3.out',
@@ -81,9 +75,9 @@ export function testimonialsAnimation() {
     // medium
     '(min-width: 768px) and (max-width: 991px)': function () {
       testimonials.forEach((element, index) => {
-        gsap.to(element, {
-          opacity: 1,
-          y: '0rem',
+        gsap.from(element, {
+          opacity: 0,
+          y: '5rem',
           duration: 0.9,
           delay: index * 0.15,
           ease: 'power3.out',
@@ -98,9 +92,9 @@ export function testimonialsAnimation() {
     // small
     '(max-width: 480px)': function () {
       testimonials.forEach((element, index) => {
-        gsap.to(element, {
-          opacity: 1,
-          y: '0rem',
+        gsap.from(element, {
+          opacity: 0,
+          y: '4rem',
           duration: 0.8,
           delay: index * 0.1,
           ease: 'power2.out',
