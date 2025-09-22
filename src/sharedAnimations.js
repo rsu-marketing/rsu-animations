@@ -67,7 +67,7 @@ export function testimonialsAnimation() {
           scrollTrigger: {
             trigger: element,
             start: 'top 80%',
-            toggleActions: 'play none none reverse',
+            toggleActions: 'restart none none reverse',
           },
         });
       });
@@ -84,7 +84,7 @@ export function testimonialsAnimation() {
           scrollTrigger: {
             trigger: element,
             start: 'top 85%',
-            toggleActions: 'play none none reverse',
+            toggleActions: 'restart none none reverse',
           },
         });
       });
@@ -101,7 +101,7 @@ export function testimonialsAnimation() {
           scrollTrigger: {
             trigger: element,
             start: 'top 90%',
-            toggleActions: 'play none none reverse',
+            toggleActions: 'restart none none reverse',
           },
         });
       });
@@ -142,7 +142,7 @@ export function splitTextAnimation() {
               stagger: 0.1,
               scrollTrigger: {
                 trigger: element,
-                toggleActions: 'play none none reverse',
+                toggleActions: 'restart none none reverse',
                 start: 'top 80%',
               },
             }
