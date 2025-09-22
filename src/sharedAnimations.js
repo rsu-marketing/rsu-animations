@@ -54,56 +54,53 @@ export function testimonialsAnimation() {
     ScrollTrigger.matchMedia({
       // large
       "(min-width: 992px)": function () {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: testimonials[0],
-            start: "top 80%",
-            toggleActions: "play none none reverse"
-          }
-        });
-
-        tl.from(testimonials, {
-          opacity: 0,
-          y: "6.25rem",
-          duration: 1,
-          ease: "power3.out",
-          stagger: 0.2
+        testimonials.forEach((element, index) => {
+          gsap.from(element, {
+            opacity: 0,
+            y: "6.25rem",
+            duration: 1,
+            delay: index * 0.2,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: element,
+              start: "top 80%",
+              toggleActions: "play none none reverse"
+            }
+          });
         });
       },
       // medium
       "(min-width: 768px) and (max-width: 991px)": function () {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: testimonials[0],
-            start: "top 85%",
-            toggleActions: "play none none reverse"
-          }
-        });
-
-        tl.from(testimonials, {
-          opacity: 0,
-          y: "5rem",
-          duration: 0.9,
-          ease: "power3.out",
-          stagger: 0.15
+        testimonials.forEach((element, index) => {
+          gsap.from(element, {
+            opacity: 0,
+            y: "5rem",
+            duration: 0.9,
+            delay: index * 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: element,
+              start: "top 85%",
+              toggleActions: "play none none reverse"
+            }
+          });
         });
       },
       // small
       "(max-width: 480px)": function () {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: testimonials[0],
-            start: "top 90%",
-            toggleActions: "play none none reverse"
-          }
-        });
-
-        tl.from(testimonials, {
-          opacity: 0,
-          y: "4rem",
-          duration: 0.8,
-          ease: "power2.out",
-          stagger: 0.1
+        testimonials.forEach((element, index) => {
+          gsap.from(element, {
+            opacity: 0,
+            y: "4rem",
+            duration: 0.8,
+            delay: index * 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: element,
+              start: "top 90%",
+              toggleActions: "play none none reverse"
+            }
+          });
         });
       }
     });
