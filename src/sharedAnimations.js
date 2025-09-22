@@ -49,22 +49,88 @@ export function testimonialsAnimation() {
   const testimonials = document.querySelectorAll(".c-testimonial-container");
   if (testimonials.length === 0) return;
 
+  // Inject testimonial content into correct positions
+  function injectTestimonials() {
+    const appendOne = document.querySelector("[appendOne]");
+    const testimonialOne = document.querySelector("[testimonialOne]");
+    const appendTwo = document.querySelector("[appendTwo]");
+    const testimonialTwo = document.querySelector("[testimonialTwo]");
+
+    // Inject appendOne into testimonialOne
+    if (testimonialOne && testimonialOne.children.length >= 2 && appendOne) {
+      testimonialOne.insertBefore(appendOne, testimonialOne.children[2]);
+    }
+
+    // Inject appendTwo into testimonialTwo
+    if (testimonialTwo && testimonialTwo.children.length >= 1 && appendTwo) {
+      testimonialTwo.insertBefore(appendTwo, testimonialTwo.children[1]);
+    }
+  }
+
+  // Setup testimonials animation with responsive breakpoints
+  function setupTestimonialAnimations() {
+    ScrollTrigger.matchMedia({
+      // large
+      "(min-width: 992px)": function () {
+        testimonials.forEach((element, index) => {
+          gsap.from(element, {
+            opacity: 0,
+            y: "6.25rem",
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: element,
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+              stagger: 0.2 * index
+            }
+          });
+        });
+      },
+      // medium
+      "(min-width: 768px) and (max-width: 991px)": function () {
+        testimonials.forEach((element, index) => {
+          gsap.from(element, {
+            opacity: 0,
+            y: "5rem",
+            duration: 0.9,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: element,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+              stagger: 0.15 * index
+            }
+          });
+        });
+      },
+      // small
+      "(max-width: 480px)": function () {
+        testimonials.forEach((element, index) => {
+          gsap.from(element, {
+            opacity: 0,
+            y: "4rem",
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: element,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+              stagger: 0.1 * index
+            }
+          });
+        });
+      }
+    });
+  }
+
   // Wrap in load event to ensure DOM is ready and handle dynamic content
   window.addEventListener('load', function () {
-    testimonials.forEach((element, index) => {
-      gsap.from(element, {
-        opacity: 0,
-        y: "6.25rem",
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: element,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-          stagger: 0.2 * index
-        }
-      });
-    });
+    // Inject testimonials first
+    injectTestimonials();
+
+    // Then setup animations
+    setupTestimonialAnimations();
 
     // Refresh ScrollTrigger after setting up animations
     setTimeout(() => {

@@ -523,28 +523,7 @@ function home() {
         opacity: 1,
       });
 
-      // Inject data testimonnial
-      document.addEventListener("DOMContentLoaded", function () {
-        const appendOne = document.querySelector("[appendOne]");
-        const testimonialOne = document.querySelector("[testimonialOne]");
-
-        // Vérifiez s'il existe au moins trois éléments dans testimonialOne
-        if (testimonialOne && testimonialOne.children.length >= 2) {
-          // Insérez l'élément avec l'attribut [appendOne] après le deuxième élément
-          testimonialOne.insertBefore(appendOne, testimonialOne.children[2]);
-        }
-      });
-
-      document.addEventListener("DOMContentLoaded", function () {
-        const appendTwo = document.querySelector("[appendTwo]");
-        const testimonialTwo = document.querySelector("[testimonialTwo]");
-
-        // Vérifiez s'il existe au moins trois éléments dans testimonialOne
-        if (testimonialTwo && testimonialTwo.children.length >= 1) {
-          // Insérez l'élément avec l'attribut [appendOne] après le deuxième élément
-          testimonialTwo.insertBefore(appendTwo, testimonialTwo.children[1]);
-        }
-      });
+      // Testimonial injection is now handled in sharedAnimations.js
 
       // MARQUEE ON SCROLL
 
@@ -573,28 +552,7 @@ function home() {
         opacity: 1,
       });
 
-      // Inject data testimonial
-      document.addEventListener("DOMContentLoaded", function () {
-        const appendOne = document.querySelector("[appendOne]");
-        const testimonialOne = document.querySelector("[testimonialOne]");
-
-        // Vérifiez s'il existe au moins trois éléments dans testimonialOne
-        if (testimonialOne && testimonialOne.children.length >= 2) {
-          // Insérez l'élément avec l'attribut [appendOne] après le deuxième élément
-          testimonialOne.insertBefore(appendOne, testimonialOne.children[2]);
-        }
-      });
-
-      document.addEventListener("DOMContentLoaded", function () {
-        const appendTwo = document.querySelector("[appendTwo]");
-        const testimonialTwo = document.querySelector("[testimonialTwo]");
-
-        // Vérifiez s'il existe au moins trois éléments dans testimonialOne
-        if (testimonialTwo && testimonialTwo.children.length >= 1) {
-          // Insérez l'élément avec l'attribut [appendOne] après le deuxième élément
-          testimonialTwo.insertBefore(appendTwo, testimonialTwo.children[1]);
-        }
-      });
+      // Testimonial injection is now handled in sharedAnimations.js
 
       // MARQUEE ON SCROLL
 
@@ -623,28 +581,7 @@ function home() {
         opacity: 1,
       });
 
-      // Inject data testimonial
-      document.addEventListener("DOMContentLoaded", function () {
-        const appendOne = document.querySelector("[appendOne]");
-        const testimonialOne = document.querySelector("[testimonialOne]");
-
-        // Vérifiez s'il existe au moins trois éléments dans testimonialOne
-        if (testimonialOne && testimonialOne.children.length >= 2) {
-          // Insérez l'élément avec l'attribut [appendOne] après le deuxième élément
-          testimonialOne.insertBefore(appendOne, testimonialOne.children[2]);
-        }
-      });
-
-      document.addEventListener("DOMContentLoaded", function () {
-        const appendTwo = document.querySelector("[appendTwo]");
-        const testimonialTwo = document.querySelector("[testimonialOne]");
-
-        // Vérifiez s'il existe au moins trois éléments dans testimonialOne
-        if (testimonialTwo && testimonialTwo.children.length >= 3) {
-          // Insérez l'élément avec l'attribut [appendOne] après le deuxième élément
-          testimonialTwo.insertBefore(appendTwo, testimonialTwo.children[1]);
-        }
-      });
+      // Testimonial injection is now handled in sharedAnimations.js
 
       // MARQUEE ON SCROLL
 
