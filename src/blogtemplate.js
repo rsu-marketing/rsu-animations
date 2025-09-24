@@ -21,7 +21,7 @@ function blogtemplate() {
         trigger: tocSidebar,
         start: 'top 20px',
         endTrigger: tocSidebar.parentElement,
-        end: 'bottom 20px',
+        end: () => `bottom ${tocSidebar.offsetHeight + 20}px`,
         pin: true,
         pinSpacing: false,
         anticipatePin: 1,
