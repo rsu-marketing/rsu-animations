@@ -14,21 +14,6 @@ function blog() {
       effects: true,
     });
 
-    // Sticky TOC sidebar
-    const tocSidebar = document.querySelector('.fs-toc_sidebar');
-    if (tocSidebar) {
-      ScrollTrigger.create({
-        trigger: tocSidebar,
-        start: 'top 20px',
-        endTrigger: '.smooth-content',
-        end: 'bottom 20px',
-        pin: true,
-        pinSpacing: false,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-      });
-    }
-
     ScrollTrigger.refresh();
   });
 
