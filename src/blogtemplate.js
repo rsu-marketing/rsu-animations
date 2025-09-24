@@ -15,7 +15,7 @@ function blogtemplate() {
     });
 
     // Sticky TOC sidebar
-    const tocSidebar = document.querySelector('.fs-toc_sidebar');
+    const tocSidebar = document.querySelector('.c-tos-sidebar');
     if (tocSidebar) {
       ScrollTrigger.create({
         trigger: tocSidebar,
