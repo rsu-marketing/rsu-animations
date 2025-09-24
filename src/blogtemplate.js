@@ -29,6 +29,21 @@ function blogtemplate() {
       });
     }
 
+    // Finsweet TOC: smooth scroll to section
+    document.querySelectorAll('.c-toc-link').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault(); // prevent default anchor behavior
+        const targetId = link.getAttribute('href').replace('#', '');
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          smoother.scrollTo(targetEl, {
+            duration: 1, // scroll duration in seconds
+            offsetY: 20, // optional offset from top
+          });
+        }
+      });
+    });
+
     ScrollTrigger.refresh();
   });
 
