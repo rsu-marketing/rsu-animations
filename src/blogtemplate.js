@@ -6,15 +6,13 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 function blogtemplate() {
   // smooth scroll
   document.addEventListener('DOMContentLoaded', () => {
-    if (window.innerWidth >= 768) {
-      let smoother = ScrollSmoother.create({
-        wrapper: '.smooth-wrapper',
-        content: '.smooth-content',
-        smooth: 1,
-        smoothTouch: 0.1,
-        effects: true,
-      });
-    }
+    let smoother = ScrollSmoother.create({
+      wrapper: '.smooth-wrapper',
+      content: '.smooth-content',
+      smooth: 1,
+      smoothTouch: 0.1,
+      effects: true,
+    });
 
     // Sticky TOC sidebar
     const tocSidebar = document.querySelector('.c-tos-sidebar');
