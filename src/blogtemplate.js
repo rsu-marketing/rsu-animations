@@ -34,22 +34,40 @@ function blogtemplate() {
 
         // Mobile behavior (less than 768px)
         '(max-width: 767px)': function() {
-          // Set z-index for mobile to ensure it's visible
+          // Set initial styles for mobile
+          tocSidebar.style.position = 'absolute';
+          tocSidebar.style.bottom = '0';
+          tocSidebar.style.left = '0';
+          tocSidebar.style.right = '0';
           tocSidebar.style.zIndex = '9999';
-          tocSidebar.style.position = 'relative';
+          tocSidebar.style.width = '100%';
 
+          // Use ScrollSmoother effects to handle mobile positioning
+          smoother.effects(tocSidebar, {
+            speed: 0,
+            lag: 0,
+            from: 'self',
+            to: 'self'
+          });
+
+          // Create a ScrollTrigger to handle the mobile sticky effect
           ScrollTrigger.create({
             trigger: '.smooth-content',
             start: 'top bottom',
             end: 'bottom top',
-            pin: tocSidebar,
-            pinSpacing: false,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onRefresh: () => {
-              tocSidebar.style.zIndex = '9999';
-              tocSidebar.style.position = 'relative';
-            }
+            onUpdate: (self) => {
+              // Keep the sidebar positioned at the bottom of the viewport
+              const scrollProgress = self.progress;
+              const viewportHeight = window.innerHeight;
+              const sidebarHeight = tocSidebar.offsetHeight;
+
+              // Position the sidebar based on scroll progress
+              gsap.set(tocSidebar, {
+                y: -(scrollProgress * (document.querySelector('.smooth-content').offsetHeight - viewportHeight)),
+                force3D: true
+              });
+            },
+            invalidateOnRefresh: true
           });
         }
       });
