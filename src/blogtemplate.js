@@ -34,6 +34,10 @@ function blogtemplate() {
 
         // Mobile behavior (less than 768px)
         '(max-width: 767px)': function() {
+          // Set z-index for mobile to ensure it's visible
+          tocSidebar.style.zIndex = '9999';
+          tocSidebar.style.position = 'relative';
+
           ScrollTrigger.create({
             trigger: '.smooth-content',
             start: 'top bottom',
@@ -42,6 +46,10 @@ function blogtemplate() {
             pinSpacing: false,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            onRefresh: () => {
+              tocSidebar.style.zIndex = '9999';
+              tocSidebar.style.position = 'relative';
+            }
           });
         }
       });
