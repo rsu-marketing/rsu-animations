@@ -20,7 +20,7 @@ function blogtemplate() {
       if (tocSidebar) {
         ScrollTrigger.create({
           trigger: tocSidebar,
-          start: 'top 20px',
+          start: 'top 8rem',
           endTrigger: tocSidebar.parentElement,
           end: () => `bottom ${tocSidebar.offsetHeight + 150}px`,
           pin: true,
