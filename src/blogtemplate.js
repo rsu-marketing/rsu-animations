@@ -30,8 +30,7 @@ function blogtemplate() {
     }
 
     // Smooth scroll override for TOC links
-    const tocLinks = document.querySelectorAll('.c-toc-link');
-    tocLinks.forEach((link) => {
+    document.querySelectorAll('.c-toc-link').forEach((link) => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
 
@@ -39,7 +38,7 @@ function blogtemplate() {
         const targetEl = document.getElementById(targetId);
 
         if (targetEl) {
-          // scroll with ScrollSmoother
+          // smooth scroll
           smoother.scrollTo(targetEl, {
             duration: 1,
             offsetY: 20,
@@ -48,8 +47,8 @@ function blogtemplate() {
             },
           });
 
-          // 🔥 Update TOC active state immediately
-          tocLinks.forEach((l) => l.classList.remove('w--current'));
+          // 🔥 Remove w--current from all links dynamically
+          document.querySelectorAll('.c-toc-link').forEach((l) => l.classList.remove('w--current'));
           link.classList.add('w--current');
         }
       });
@@ -67,7 +66,7 @@ function blogtemplate() {
     });
 
     function setActiveLink(id) {
-      tocLinks.forEach((link) => {
+      document.querySelectorAll('.c-toc-link').forEach((link) => {
         link.classList.toggle('w--current', link.getAttribute('href') === `#${id}`);
       });
     }
