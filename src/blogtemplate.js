@@ -49,8 +49,8 @@ function blogtemplate() {
           });
 
           // 🔥 Update TOC active state immediately
-          tocLinks.forEach((l) => l.classList.remove('is-active'));
-          link.classList.add('is-active');
+          tocLinks.forEach((l) => l.classList.remove('w--current'));
+          link.classList.add('w--current');
         }
       });
     });
@@ -68,7 +68,7 @@ function blogtemplate() {
 
     function setActiveLink(id) {
       tocLinks.forEach((link) => {
-        link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`);
+        link.classList.toggle('w--current', link.getAttribute('href') === `#${id}`);
       });
     }
 
