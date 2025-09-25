@@ -29,43 +29,41 @@ function blogtemplate() {
       });
     }
 
-    // Smooth scroll override for TOC links
-    document.querySelectorAll('.c-toc-link').forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
+    // Function to get all current TOC links dynamically
+    function getTocLinks() {
+      return document.querySelectorAll('.c-toc-link');
+    }
 
-        const targetId = link.getAttribute('href').replace('#', '');
-        const targetEl = document.getElementById(targetId);
+    // Smooth scroll on click
+    function attachClickHandlers() {
+      getTocLinks().forEach((link) => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('href').replace('#', '');
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            smoother.scrollTo(targetEl, {
+              duration: 1,
+              offsetY: 20,
+              onComplete: () => ScrollTrigger.refresh(true),
+            });
 
-        if (targetEl) {
-          // smooth scroll
-          smoother.scrollTo(targetEl, {
-            duration: 1,
-            offsetY: 20,
-            onComplete: () => {
-              // Immediately remove all active classes
-              document.querySelectorAll('.c-toc-link').forEach((l) => l.classList.remove('is-active'));
-              // Add to clicked link
-              link.classList.add('is-active');
-
-              // Force Finsweet TOC to recalc/reset
-              if (window.FinsweetAttributes?.modules?.toc?.destroy) {
-                window.FinsweetAttributes.modules.toc.destroy();
-              }
-            },
-          });
-
-          // 🔥 Remove is-active from all links dynamically
-          document.querySelectorAll('.c-toc-link').forEach((l) => l.classList.remove('is-active'));
-          link.classList.add('is-active');
-        }
+            // Remove active from all and add to clicked
+            getTocLinks().forEach((l) => l.classList.remove('is-active'));
+            link.classList.add('is-active');
+          }
+        });
       });
-    });
+    }
 
-    // Extra GSAP-powered highlight sync (scroll-based)
-    document.querySelectorAll('h2[id], h3[id]').forEach((heading) => {
+    attachClickHandlers();
+
+    // Scroll-based highlighting
+    const headings = document.querySelectorAll('h2[id], h3[id]');
+    headings.forEach((heading) => {
       ScrollTrigger.create({
         trigger: heading,
+        scroller: smoother?.content || window, // important for ScrollSmoother
         start: 'top center',
         end: 'bottom center',
         onEnter: () => setActiveLink(heading.id),
@@ -74,7 +72,7 @@ function blogtemplate() {
     });
 
     function setActiveLink(id) {
-      document.querySelectorAll('.c-toc-link').forEach((link) => {
+      getTocLinks().forEach((link) => {
         link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`);
       });
     }
