@@ -43,7 +43,15 @@ function blogtemplate() {
             duration: 1,
             offsetY: 20,
             onComplete: () => {
-              ScrollTrigger.refresh(true);
+              // Immediately remove all active classes
+              document.querySelectorAll('.c-toc-link').forEach((l) => l.classList.remove('w--current'));
+              // Add to clicked link
+              link.classList.add('w--current');
+
+              // Force Finsweet TOC to recalc/reset
+              if (window.FinsweetAttributes?.modules?.toc?.destroy) {
+                window.FinsweetAttributes.modules.toc.destroy();
+              }
             },
           });
 
