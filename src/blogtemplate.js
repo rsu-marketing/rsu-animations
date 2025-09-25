@@ -39,6 +39,10 @@ function blogtemplate() {
           smoother.scrollTo(targetEl, {
             duration: 1, // scroll duration in seconds
             offsetY: 20, // optional offset from top
+            onComplete: () => {
+              // Force ScrollTrigger + TOC refresh after scroll
+              ScrollTrigger.refresh(true);
+            },
           });
         }
       });
