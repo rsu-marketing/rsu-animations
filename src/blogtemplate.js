@@ -17,15 +17,33 @@ function blogtemplate() {
     // Sticky TOC sidebar
     const tocSidebar = document.querySelector('.c-tos-sidebar');
     if (tocSidebar) {
-      ScrollTrigger.create({
-        trigger: tocSidebar,
-        start: 'top 20px',
-        endTrigger: tocSidebar.parentElement,
-        end: () => `bottom ${tocSidebar.offsetHeight + 150}px`,
-        pin: true,
-        pinSpacing: false,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
+      ScrollTrigger.matchMedia({
+        // Desktop behavior (768px and above)
+        '(min-width: 768px)': function() {
+          ScrollTrigger.create({
+            trigger: tocSidebar,
+            start: 'top 20px',
+            endTrigger: tocSidebar.parentElement,
+            end: () => `bottom ${tocSidebar.offsetHeight + 150}px`,
+            pin: true,
+            pinSpacing: false,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          });
+        },
+
+        // Mobile behavior (less than 768px)
+        '(max-width: 767px)': function() {
+          ScrollTrigger.create({
+            trigger: '.smooth-content',
+            start: 'top bottom',
+            end: 'bottom top',
+            pin: tocSidebar,
+            pinSpacing: false,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          });
+        }
       });
     }
 
