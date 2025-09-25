@@ -6,20 +6,19 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 function blogtemplate() {
   // smooth scroll
   document.addEventListener('DOMContentLoaded', () => {
-    let smoother = null;
-
-    // Only create ScrollSmoother on desktop (768px and above)
     if (window.innerWidth >= 768) {
-      smoother = ScrollSmoother.create({
+      let smoother = ScrollSmoother.create({
         wrapper: '.smooth-wrapper',
         content: '.smooth-content',
         smooth: 1,
         smoothTouch: 0.1,
         effects: true,
       });
+    }
 
-      // Sticky TOC sidebar - desktop only
-      const tocSidebar = document.querySelector('.c-tos-sidebar');
+    // Sticky TOC sidebar
+    const tocSidebar = document.querySelector('.c-tos-sidebar');
+    if (window.innerWidth >= 768) {
       if (tocSidebar) {
         ScrollTrigger.create({
           trigger: tocSidebar,
@@ -33,7 +32,6 @@ function blogtemplate() {
         });
       }
     }
-
     // Function to get all current TOC links dynamically
     function getTocLinks() {
       return document.querySelectorAll('.c-toc-link');
@@ -47,19 +45,11 @@ function blogtemplate() {
           const targetId = link.getAttribute('href').replace('#', '');
           const targetEl = document.getElementById(targetId);
           if (targetEl) {
-            // Use smoother if available (desktop), otherwise use native scroll (mobile)
-            if (smoother) {
-              smoother.scrollTo(targetEl, {
-                duration: 1,
-                offsetY: 20,
-                onComplete: () => ScrollTrigger.refresh(true),
-              });
-            } else {
-              targetEl.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-              });
-            }
+            smoother.scrollTo(targetEl, {
+              duration: 1,
+              offsetY: 20,
+              onComplete: () => ScrollTrigger.refresh(true),
+            });
 
             // Remove active from all and add to clicked
             getTocLinks().forEach((l) => l.classList.remove('is-active'));
