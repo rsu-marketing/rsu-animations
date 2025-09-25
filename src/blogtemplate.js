@@ -29,24 +29,48 @@ function blogtemplate() {
       });
     }
 
-    // Finsweet TOC: smooth scroll to section
-    document.querySelectorAll('.c-toc-link').forEach((link) => {
+    // Smooth scroll override for TOC links
+    const tocLinks = document.querySelectorAll('.c-toc-link');
+    tocLinks.forEach((link) => {
       link.addEventListener('click', (e) => {
-        e.preventDefault(); // prevent default anchor behavior
+        e.preventDefault();
+
         const targetId = link.getAttribute('href').replace('#', '');
         const targetEl = document.getElementById(targetId);
+
         if (targetEl) {
+          // scroll with ScrollSmoother
           smoother.scrollTo(targetEl, {
-            duration: 1, // scroll duration in seconds
-            offsetY: 20, // optional offset from top
+            duration: 1,
+            offsetY: 20,
             onComplete: () => {
-              // Force ScrollTrigger + TOC refresh after scroll
               ScrollTrigger.refresh(true);
             },
           });
+
+          // 🔥 Update TOC active state immediately
+          tocLinks.forEach((l) => l.classList.remove('is-active'));
+          link.classList.add('is-active');
         }
       });
     });
+
+    // Extra GSAP-powered highlight sync (scroll-based)
+    document.querySelectorAll('h2[id], h3[id]').forEach((heading) => {
+      ScrollTrigger.create({
+        trigger: heading,
+        start: 'top center',
+        end: 'bottom center',
+        onEnter: () => setActiveLink(heading.id),
+        onEnterBack: () => setActiveLink(heading.id),
+      });
+    });
+
+    function setActiveLink(id) {
+      tocLinks.forEach((link) => {
+        link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`);
+      });
+    }
 
     ScrollTrigger.refresh();
   });
