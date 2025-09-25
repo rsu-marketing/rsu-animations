@@ -6,71 +6,32 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 function blogtemplate() {
   // smooth scroll
   document.addEventListener('DOMContentLoaded', () => {
-    let smoother = ScrollSmoother.create({
-      wrapper: '.smooth-wrapper',
-      content: '.smooth-content',
-      smooth: 1,
-      smoothTouch: 0.1,
-      effects: true,
-    });
+    let smoother = null;
 
-    // Sticky TOC sidebar
-    const tocSidebar = document.querySelector('.c-tos-sidebar');
-    if (tocSidebar) {
-      ScrollTrigger.matchMedia({
-        // Desktop behavior (768px and above)
-        '(min-width: 768px)': function() {
-          ScrollTrigger.create({
-            trigger: tocSidebar,
-            start: 'top 20px',
-            endTrigger: tocSidebar.parentElement,
-            end: () => `bottom ${tocSidebar.offsetHeight + 150}px`,
-            pin: true,
-            pinSpacing: false,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          });
-        },
-
-        // Mobile behavior (less than 768px)
-        '(max-width: 767px)': function() {
-          // Set initial styles for mobile
-          tocSidebar.style.position = 'absolute';
-          tocSidebar.style.bottom = '0';
-          tocSidebar.style.left = '0';
-          tocSidebar.style.right = '0';
-          tocSidebar.style.zIndex = '9999';
-          tocSidebar.style.width = '100%';
-
-          // Use ScrollSmoother effects to handle mobile positioning
-          smoother.effects(tocSidebar, {
-            speed: 0,
-            lag: 0,
-            from: 'self',
-            to: 'self'
-          });
-
-          // Create a ScrollTrigger to handle the mobile sticky effect
-          ScrollTrigger.create({
-            trigger: '.smooth-content',
-            start: 'top bottom',
-            end: 'bottom top',
-            onUpdate: (self) => {
-              // Keep the sidebar positioned at the bottom of the viewport
-              const scrollProgress = self.progress;
-              const viewportHeight = window.innerHeight;
-              const sidebarHeight = tocSidebar.offsetHeight;
-
-              // Position the sidebar based on scroll progress
-              gsap.set(tocSidebar, {
-                y: -(scrollProgress * (document.querySelector('.smooth-content').offsetHeight - viewportHeight)),
-                force3D: true
-              });
-            },
-            invalidateOnRefresh: true
-          });
-        }
+    // Only create ScrollSmoother on desktop (768px and above)
+    if (window.innerWidth >= 768) {
+      smoother = ScrollSmoother.create({
+        wrapper: '.smooth-wrapper',
+        content: '.smooth-content',
+        smooth: 1,
+        smoothTouch: 0.1,
+        effects: true,
       });
+
+      // Sticky TOC sidebar - desktop only
+      const tocSidebar = document.querySelector('.c-tos-sidebar');
+      if (tocSidebar) {
+        ScrollTrigger.create({
+          trigger: tocSidebar,
+          start: 'top 20px',
+          endTrigger: tocSidebar.parentElement,
+          end: () => `bottom ${tocSidebar.offsetHeight + 150}px`,
+          pin: true,
+          pinSpacing: false,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        });
+      }
     }
 
     // Function to get all current TOC links dynamically
@@ -86,11 +47,19 @@ function blogtemplate() {
           const targetId = link.getAttribute('href').replace('#', '');
           const targetEl = document.getElementById(targetId);
           if (targetEl) {
-            smoother.scrollTo(targetEl, {
-              duration: 1,
-              offsetY: 20,
-              onComplete: () => ScrollTrigger.refresh(true),
-            });
+            // Use smoother if available (desktop), otherwise use native scroll (mobile)
+            if (smoother) {
+              smoother.scrollTo(targetEl, {
+                duration: 1,
+                offsetY: 20,
+                onComplete: () => ScrollTrigger.refresh(true),
+              });
+            } else {
+              targetEl.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
 
             // Remove active from all and add to clicked
             getTocLinks().forEach((l) => l.classList.remove('is-active'));
