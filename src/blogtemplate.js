@@ -5,12 +5,9 @@ import { ScrollSmoother } from './gsap/all.js';
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 function blogtemplate() {
   // smooth scroll
-  let smoother = null;
-  let currentBreakpoint = window.innerWidth >= 768 ? 'desktop' : 'mobile';
-
-  function initializeSmoother() {
-    if (window.innerWidth >= 768 && !smoother) {
-      smoother = ScrollSmoother.create({
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.innerWidth >= 768) {
+      let smoother = ScrollSmoother.create({
         wrapper: '.smooth-wrapper',
         content: '.smooth-content',
         smooth: 1,
@@ -18,53 +15,12 @@ function blogtemplate() {
         effects: true,
       });
     }
-  }
 
-  function destroySmoother() {
-    if (smoother) {
-      smoother.kill();
-      smoother = null;
-      ScrollTrigger.refresh();
-    }
-  }
-
-  function handleResize() {
-    const newBreakpoint = window.innerWidth >= 768 ? 'desktop' : 'mobile';
-
-    if (newBreakpoint !== currentBreakpoint) {
-      currentBreakpoint = newBreakpoint;
-
-      if (currentBreakpoint === 'desktop') {
-        initializeSmoother();
-        initializeTocSidebar();
-        attachClickHandlers();
-        initializeScrollHighlighting();
-      } else {
-        destroySmoother();
-        destroyTocSidebar();
-      }
-    }
-  }
-
-  // Initialize on load
-  document.addEventListener('DOMContentLoaded', () => {
-    initializeSmoother();
-    initializeTocSidebar();
-    attachClickHandlers();
-    initializeScrollHighlighting();
-
-    // Add resize listener
-    window.addEventListener('resize', handleResize);
-  });
-
-  // Sticky TOC sidebar
-  let tocSidebarScrollTrigger = null;
-
-  function initializeTocSidebar() {
+    // Sticky TOC sidebar
+    const tocSidebar = document.querySelector('.c-tos-sidebar');
     if (window.innerWidth >= 768) {
-      const tocSidebar = document.querySelector('.c-tos-sidebar');
-      if (tocSidebar && !tocSidebarScrollTrigger) {
-        tocSidebarScrollTrigger = ScrollTrigger.create({
+      if (tocSidebar) {
+        ScrollTrigger.create({
           trigger: tocSidebar,
           start: 'top 20px',
           endTrigger: tocSidebar.parentElement,
@@ -76,70 +32,56 @@ function blogtemplate() {
         });
       }
     }
-  }
-
-  function destroyTocSidebar() {
-    if (tocSidebarScrollTrigger) {
-      tocSidebarScrollTrigger.kill();
-      tocSidebarScrollTrigger = null;
+    // Function to get all current TOC links dynamically
+    function getTocLinks() {
+      return document.querySelectorAll('.c-toc-link');
     }
-  }
 
-  // Function to get all current TOC links dynamically
-  function getTocLinks() {
-    return document.querySelectorAll('.c-toc-link');
-  }
-
-  // Smooth scroll on click
-  function attachClickHandlers() {
-    getTocLinks().forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href').replace('#', '');
-        const targetEl = document.getElementById(targetId);
-        if (targetEl) {
-          if (smoother) {
+    // Smooth scroll on click
+    function attachClickHandlers() {
+      getTocLinks().forEach((link) => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('href').replace('#', '');
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
             smoother.scrollTo(targetEl, {
               duration: 1,
               offsetY: 20,
               onComplete: () => ScrollTrigger.refresh(true),
             });
-          } else {
-            // Fallback for mobile
-            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Remove active from all and add to clicked
+            getTocLinks().forEach((l) => l.classList.remove('is-active'));
+            link.classList.add('is-active');
           }
-
-          // Remove active from all and add to clicked
-          getTocLinks().forEach((l) => l.classList.remove('is-active'));
-          link.classList.add('is-active');
-        }
+        });
       });
-    });
-  }
+    }
 
-  // Scroll-based highlighting
-  function initializeScrollHighlighting() {
+    attachClickHandlers();
+
+    // Scroll-based highlighting
     const headings = document.querySelectorAll('h2[id], h3[id]');
     headings.forEach((heading) => {
       ScrollTrigger.create({
         trigger: heading,
-        scroller: smoother?.content || window,
+        scroller: smoother?.content || window, // important for ScrollSmoother
         start: 'top center',
         end: 'bottom center',
         onEnter: () => setActiveLink(heading.id),
         onEnterBack: () => setActiveLink(heading.id),
       });
     });
-  }
 
-  function setActiveLink(id) {
-    getTocLinks().forEach((link) => {
-      link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`);
-    });
-  }
+    function setActiveLink(id) {
+      getTocLinks().forEach((link) => {
+        link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`);
+      });
+    }
 
-  // Initial refresh
-  ScrollTrigger.refresh();
+    ScrollTrigger.refresh();
+  });
 
   // refresh scrolltrigger
   let links = document.querySelectorAll('.cc-refresh');
