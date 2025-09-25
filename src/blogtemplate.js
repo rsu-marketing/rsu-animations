@@ -44,9 +44,9 @@ function blogtemplate() {
             offsetY: 20,
             onComplete: () => {
               // Immediately remove all active classes
-              document.querySelectorAll('.c-toc-link').forEach((l) => l.classList.remove('w--current'));
+              document.querySelectorAll('.c-toc-link').forEach((l) => l.classList.remove('is-active'));
               // Add to clicked link
-              link.classList.add('w--current');
+              link.classList.add('is-active');
 
               // Force Finsweet TOC to recalc/reset
               if (window.FinsweetAttributes?.modules?.toc?.destroy) {
@@ -55,9 +55,9 @@ function blogtemplate() {
             },
           });
 
-          // 🔥 Remove w--current from all links dynamically
-          document.querySelectorAll('.c-toc-link').forEach((l) => l.classList.remove('w--current'));
-          link.classList.add('w--current');
+          // 🔥 Remove is-active from all links dynamically
+          document.querySelectorAll('.c-toc-link').forEach((l) => l.classList.remove('is-active'));
+          link.classList.add('is-active');
         }
       });
     });
@@ -75,7 +75,7 @@ function blogtemplate() {
 
     function setActiveLink(id) {
       document.querySelectorAll('.c-toc-link').forEach((link) => {
-        link.classList.toggle('w--current', link.getAttribute('href') === `#${id}`);
+        link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`);
       });
     }
 
