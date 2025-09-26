@@ -14,9 +14,23 @@ function blogtemplate() {
       effects: true,
       normalizeScroll: true,
     });
-    // Sync smoother on text selection changes (Cmd+F / Ctrl+F)
-    document.addEventListener('selectionchange', () => {
-      smoother.content().style.transform; // read property to force sync
+    // Fallback for Cmd+F and anchor links
+    const observer = new MutationObserver(() => {
+      // Detect if the browser has added a highlight element for search
+      const highlights = document.querySelectorAll('::selection');
+      if (highlights.length) {
+        // temporarily disable smoother
+        smoother.smooth(0);
+        // restore after a tiny delay
+        setTimeout(() => smoother.smooth(1), 50);
+      }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Optional: also restore for hash/anchor navigation
+    window.addEventListener('hashchange', () => {
+      smoother.scrollTop(window.scrollY);
     });
 
     // Sticky TOC sidebar
