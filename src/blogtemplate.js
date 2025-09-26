@@ -14,30 +14,26 @@ function blogtemplate() {
       effects: true,
       normalizeScroll: true,
     });
-    // Helper to disable/enable smoother
     function disableSmoother() {
-      smoother.paused(true); // stops smooth scrolling
-    }
-    function enableSmoother() {
-      smoother.paused(false);
+      smoother.smooth(0); // disable smooth scrolling
     }
 
-    // Detect Cmd+F / Ctrl+F
+    function enableSmoother() {
+      smoother.smooth(1); // restore smooth scrolling
+    }
+
     document.addEventListener('keydown', (e) => {
+      // Cmd+F or Ctrl+F
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
         disableSmoother();
 
-        // Optional: re-enable after a delay (user may continue searching)
-        setTimeout(() => {
-          enableSmoother();
-        }, 2000); // 2 seconds, adjust as needed
+        // Keep listening to restore after small delay
+        setTimeout(() => enableSmoother(), 500);
       }
     });
 
-    // Also re-enable if the user clicks anywhere
-    document.addEventListener('click', () => {
-      enableSmoother();
-    });
+    // Also restore if user clicks anywhere
+    document.addEventListener('click', () => enableSmoother());
 
     // Sticky TOC sidebar
     const tocSidebar = document.querySelector('.c-tos-sidebar');
