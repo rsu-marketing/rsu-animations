@@ -14,26 +14,33 @@ function blogtemplate() {
       effects: true,
       normalizeScroll: true,
     });
-    function disableSmoother() {
-      smoother.smooth(0); // disable smooth scrolling
-    }
 
-    function enableSmoother() {
-      smoother.smooth(1); // restore smooth scrolling
-    }
+    let isCmdF = false;
 
+    // Detect Cmd+F / Ctrl+F
     document.addEventListener('keydown', (e) => {
-      // Cmd+F or Ctrl+F
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
-        disableSmoother();
-
-        // Keep listening to restore after small delay
-        setTimeout(() => enableSmoother(), 500);
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'f') {
+        isCmdF = true;
+        smoother.content.style.overflow = 'visible'; // allow native scroll
+        smoother.scrollTop(); // sync smoother
       }
     });
 
-    // Also restore if user clicks anywhere
-    document.addEventListener('click', () => enableSmoother());
+    // Detect selection changes (browser highlights search result)
+    document.addEventListener('selectionchange', () => {
+      if (isCmdF) {
+        // temporarily bypass smoother scroll
+        smoother.scrollTop(); // sync smoother with native scroll
+      }
+    });
+
+    // Reset after user clicks anywhere
+    document.addEventListener('click', () => {
+      if (isCmdF) {
+        smoother.content.style.overflow = ''; // restore smoother control
+        isCmdF = false;
+      }
+    });
 
     // Sticky TOC sidebar
     const tocSidebar = document.querySelector('.c-tos-sidebar');
