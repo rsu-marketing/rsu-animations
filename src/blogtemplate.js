@@ -21,23 +21,25 @@ function blogtemplate() {
     document.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'f') {
         isCmdF = true;
-        smoother.content.style.overflow = 'visible'; // allow native scroll
-        smoother.scrollTop(); // sync smoother
+        if (smoother && smoother.wrapper && smoother.content) {
+          smoother.wrapper.style.overflow = 'visible';
+          smoother.content.style.transform = 'none';
+          smoother.scrollTop(); // sync smoother position
+        }
       }
     });
 
     // Detect selection changes (browser highlights search result)
     document.addEventListener('selectionchange', () => {
-      if (isCmdF) {
-        // temporarily bypass smoother scroll
+      if (isCmdF && smoother) {
         smoother.scrollTop(); // sync smoother with native scroll
       }
     });
 
     // Reset after user clicks anywhere
     document.addEventListener('click', () => {
-      if (isCmdF) {
-        smoother.content.style.overflow = ''; // restore smoother control
+      if (isCmdF && smoother && smoother.wrapper) {
+        smoother.wrapper.style.overflow = ''; // restore smoother control
         isCmdF = false;
       }
     });
