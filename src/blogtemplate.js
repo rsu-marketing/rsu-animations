@@ -14,23 +14,29 @@ function blogtemplate() {
       effects: true,
       normalizeScroll: true,
     });
-    // Fallback for Cmd+F and anchor links
-    const observer = new MutationObserver(() => {
-      // Detect if the browser has added a highlight element for search
-      const highlights = document.querySelectorAll('::selection');
-      if (highlights.length) {
-        // temporarily disable smoother
-        smoother.smooth(0);
-        // restore after a tiny delay
-        setTimeout(() => smoother.smooth(1), 50);
+    // Helper to disable/enable smoother
+    function disableSmoother() {
+      smoother.paused(true); // stops smooth scrolling
+    }
+    function enableSmoother() {
+      smoother.paused(false);
+    }
+
+    // Detect Cmd+F / Ctrl+F
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
+        disableSmoother();
+
+        // Optional: re-enable after a delay (user may continue searching)
+        setTimeout(() => {
+          enableSmoother();
+        }, 2000); // 2 seconds, adjust as needed
       }
     });
 
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    // Optional: also restore for hash/anchor navigation
-    window.addEventListener('hashchange', () => {
-      smoother.scrollTop(window.scrollY);
+    // Also re-enable if the user clicks anywhere
+    document.addEventListener('click', () => {
+      enableSmoother();
     });
 
     // Sticky TOC sidebar
