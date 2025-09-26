@@ -17,29 +17,25 @@ function blogtemplate() {
 
     let isCmdF = false;
 
-    // Detect Cmd+F / Ctrl+F
     document.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'f') {
         isCmdF = true;
-        if (smoother && smoother.wrapper && smoother.content) {
-          smoother.wrapper.style.overflow = 'visible';
-          smoother.content.style.transform = 'none';
-          smoother.scrollTop(); // sync smoother position
+        if (smoother) {
+          smoother.paused(true); // pause smoother, native scroll works
         }
       }
     });
 
-    // Detect selection changes (browser highlights search result)
     document.addEventListener('selectionchange', () => {
       if (isCmdF && smoother) {
-        smoother.scrollTop(); // sync smoother with native scroll
+        // optionally sync smoother position if needed
+        smoother.scrollTop();
       }
     });
 
-    // Reset after user clicks anywhere
     document.addEventListener('click', () => {
-      if (isCmdF && smoother && smoother.wrapper) {
-        smoother.wrapper.style.overflow = ''; // restore smoother control
+      if (isCmdF && smoother) {
+        smoother.paused(false); // resume smoother
         isCmdF = false;
       }
     });
