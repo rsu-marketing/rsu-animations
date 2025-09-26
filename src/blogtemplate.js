@@ -14,6 +14,10 @@ function blogtemplate() {
       effects: true,
       normalizeScroll: true,
     });
+    // Sync smoother on text selection changes (Cmd+F / Ctrl+F)
+    document.addEventListener('selectionchange', () => {
+      smoother.content().style.transform; // read property to force sync
+    });
 
     // Sticky TOC sidebar
     const tocSidebar = document.querySelector('.c-tos-sidebar');
