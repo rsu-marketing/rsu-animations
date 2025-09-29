@@ -188,9 +188,9 @@ function blogtemplate() {
       allLinks.forEach((link) => {
         const linkSlug = link.getAttribute('data-slug');
         if (linkSlug === activeSlug) {
-          link.classList.add('active');
+          link.classList.add('is-active');
         } else {
-          link.classList.remove('active');
+          link.classList.remove('is-active');
         }
       });
     }
