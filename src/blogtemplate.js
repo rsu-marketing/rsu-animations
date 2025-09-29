@@ -155,16 +155,22 @@ function blogtemplate() {
 
       if (link) {
         link.textContent = headingText;
-        link.href = `#${slug}`;
+        // Remove href to prevent URL hash changes
+        link.removeAttribute('href');
+        link.style.cursor = 'pointer';
+        // Store slug for active state management
+        link.setAttribute('data-slug', slug);
 
         // Add click handler for smooth scrolling
         link.addEventListener('click', (e) => {
           e.preventDefault();
+          e.stopPropagation();
 
           // Use ScrollSmoother if available
           const smoother = ScrollSmoother.get();
           if (smoother) {
-            smoother.scrollTo(`#${slug}`, true, 'top top');
+            // Scroll directly to the element without hash
+            smoother.scrollTo(heading, true, 'top 10%');
           } else {
             // Fallback to native smooth scrolling
             heading.scrollIntoView({
@@ -185,7 +191,8 @@ function blogtemplate() {
     function updateActiveTocLink(activeSlug) {
       const allLinks = tocContent.querySelectorAll('.c-toc-link');
       allLinks.forEach((link) => {
-        if (link.getAttribute('href') === `#${activeSlug}`) {
+        const linkSlug = link.getAttribute('data-slug');
+        if (linkSlug === activeSlug) {
           link.classList.add('active');
         } else {
           link.classList.remove('active');
@@ -196,8 +203,8 @@ function blogtemplate() {
     // Set up scroll-triggered active state updates
     const tocLinks = tocContent.querySelectorAll('.c-toc-link');
     tocLinks.forEach((link, index) => {
-      const targetId = link.getAttribute('href').substring(1);
-      const targetHeading = document.getElementById(targetId);
+      const targetSlug = link.getAttribute('data-slug');
+      const targetHeading = document.getElementById(targetSlug);
 
       if (targetHeading) {
         ScrollTrigger.create({
@@ -212,7 +219,7 @@ function blogtemplate() {
               : 'bottom 20%',
           onToggle: (self) => {
             if (self.isActive) {
-              updateActiveTocLink(targetId);
+              updateActiveTocLink(targetSlug);
             }
           },
         });
