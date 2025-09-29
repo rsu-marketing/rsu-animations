@@ -3,6 +3,9 @@
 import { ScrollTrigger, ScrollSmoother } from "./gsap/all.js";
 import { initSharedAnimations } from "./sharedAnimations.js";
 
+// Register GSAP plugins globally
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
 
 import home from './home.js'
 import offline from './offline.js'
