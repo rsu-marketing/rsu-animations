@@ -81,7 +81,7 @@ function blogtemplate() {
     if (!tocContent || !referenceLinkWrapper) return;
 
     // Get the blog rich text content (assuming it has a specific class)
-    const blogContent = document.querySelector('.c-template-blog-wrapper, .blog-rich-text, .w-richtext');
+    const blogContent = document.querySelector('.rich-text.cc-blog');
     if (!blogContent) return;
 
     // Function to create slug from text
@@ -132,7 +132,7 @@ function blogtemplate() {
             // Fallback to native smooth scrolling
             heading.scrollIntoView({
               behavior: 'smooth',
-              block: 'start'
+              block: 'start',
             });
           }
 
@@ -147,7 +147,7 @@ function blogtemplate() {
     // Function to update active TOC link based on scroll position
     function updateActiveTocLink(activeSlug) {
       const allLinks = tocContent.querySelectorAll('.c-toc-link');
-      allLinks.forEach(link => {
+      allLinks.forEach((link) => {
         if (link.getAttribute('href') === `#${activeSlug}`) {
           link.classList.add('active');
         } else {
@@ -166,15 +166,18 @@ function blogtemplate() {
         ScrollTrigger.create({
           trigger: targetHeading,
           start: 'top 20%',
-          end: index < headings.length - 1 ? () => {
-            const nextHeading = headings[index + 1];
-            return nextHeading ? `top 20%` : 'bottom 20%';
-          } : 'bottom 20%',
+          end:
+            index < headings.length - 1
+              ? () => {
+                  const nextHeading = headings[index + 1];
+                  return nextHeading ? `top 20%` : 'bottom 20%';
+                }
+              : 'bottom 20%',
           onToggle: (self) => {
             if (self.isActive) {
               updateActiveTocLink(targetId);
             }
-          }
+          },
         });
       }
     });
