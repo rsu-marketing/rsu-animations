@@ -75,27 +75,18 @@ function blogtemplate() {
 
   // TOC Sidebar Functionality
   document.addEventListener('DOMContentLoaded', () => {
-    console.log('TOC: Starting initialization...');
-
     const tocContent = document.querySelector('.c-toc-link-content');
     const referenceLinkWrapper = document.querySelector('.c-toc-link-wrapper');
 
-    console.log('TOC: Elements found:', {
-      tocContent: !!tocContent,
-      referenceLinkWrapper: !!referenceLinkWrapper
-    });
-
     if (!tocContent || !referenceLinkWrapper) {
-      console.log('TOC: Missing required elements, exiting');
+      console.error('TOC: Required elements not found');
       return;
     }
 
     // Get the blog rich text content (assuming it has a specific class)
-    const blogContent = document.querySelector('.rich-text.cc-blog');
-    console.log('TOC: Blog content found:', !!blogContent);
+    let blogContent = document.querySelector('.rich-text.cc-blog');
 
     if (!blogContent) {
-      console.log('TOC: No blog content found, trying fallback selectors...');
       // Try fallback selectors
       const fallbackSelectors = [
         '.w-richtext',
@@ -104,17 +95,13 @@ function blogtemplate() {
         '.rich-text'
       ];
 
-      let fallbackContent = null;
       for (const selector of fallbackSelectors) {
-        fallbackContent = document.querySelector(selector);
-        if (fallbackContent) {
-          console.log('TOC: Found content with fallback selector:', selector);
-          break;
-        }
+        blogContent = document.querySelector(selector);
+        if (blogContent) break;
       }
 
-      if (!fallbackContent) {
-        console.log('TOC: No blog content found with any selector, exiting');
+      if (!blogContent) {
+        console.error('TOC: No blog content found');
         return;
       }
     }
@@ -129,13 +116,22 @@ function blogtemplate() {
         .trim();
     }
 
-    // Get all H2 headings
-    const contentToUse = blogContent || fallbackContent;
-    const headings = contentToUse.querySelectorAll('h2');
-    console.log('TOC: H2 headings found:', headings.length);
+    // Get all H2 headings, filtering out those in .tldr or .text-box containers
+    const allHeadings = blogContent.querySelectorAll('h2');
+    const headings = Array.from(allHeadings).filter(heading => {
+      // Check if any parent has .tldr or .text-box class
+      let parent = heading.parentElement;
+      while (parent && parent !== blogContent) {
+        if (parent.classList.contains('tldr') || parent.classList.contains('text-box')) {
+          return false; // Skip this heading
+        }
+        parent = parent.parentElement;
+      }
+      return true; // Include this heading
+    });
 
     if (headings.length === 0) {
-      console.log('TOC: No H2 headings found, exiting');
+      console.error('TOC: No valid H2 headings found');
       return;
     }
 
@@ -144,13 +140,11 @@ function blogtemplate() {
 
     // Clear existing TOC content
     tocContent.innerHTML = '';
-    console.log('TOC: Cleared existing content');
 
     // Create TOC links for each heading
-    headings.forEach((heading, index) => {
+    headings.forEach((heading) => {
       const headingText = heading.textContent.trim();
       const slug = createSlug(headingText);
-      console.log('TOC: Processing heading:', index, headingText, '->', slug);
 
       // Add ID to heading for scroll target
       heading.id = slug;
@@ -160,23 +154,18 @@ function blogtemplate() {
       const link = newWrapper.querySelector('.c-toc-link');
 
       if (link) {
-        console.log('TOC: Found link element, updating...');
         link.textContent = headingText;
         link.href = `#${slug}`;
 
         // Add click handler for smooth scrolling
         link.addEventListener('click', (e) => {
-          console.log('TOC: Link clicked:', slug);
           e.preventDefault();
 
           // Use ScrollSmoother if available
           const smoother = ScrollSmoother.get();
-          console.log('TOC: ScrollSmoother available:', !!smoother);
-
           if (smoother) {
             smoother.scrollTo(`#${slug}`, true, 'top top');
           } else {
-            console.log('TOC: Using native smooth scrolling');
             // Fallback to native smooth scrolling
             heading.scrollIntoView({
               behavior: 'smooth',
@@ -187,25 +176,17 @@ function blogtemplate() {
           // Update active state
           updateActiveTocLink(slug);
         });
-      } else {
-        console.log('TOC: No link element found in wrapper');
       }
 
       tocContent.appendChild(newWrapper);
-      console.log('TOC: Added TOC link to container');
     });
-
-    console.log('TOC: Finished creating all TOC links');
 
     // Function to update active TOC link based on scroll position
     function updateActiveTocLink(activeSlug) {
       const allLinks = tocContent.querySelectorAll('.c-toc-link');
-      console.log('TOC: Updating active state for:', activeSlug, 'Found links:', allLinks.length);
-
       allLinks.forEach((link) => {
         if (link.getAttribute('href') === `#${activeSlug}`) {
           link.classList.add('active');
-          console.log('TOC: Added active class to:', activeSlug);
         } else {
           link.classList.remove('active');
         }
@@ -214,14 +195,11 @@ function blogtemplate() {
 
     // Set up scroll-triggered active state updates
     const tocLinks = tocContent.querySelectorAll('.c-toc-link');
-    console.log('TOC: Setting up ScrollTriggers for', tocLinks.length, 'links');
-
     tocLinks.forEach((link, index) => {
       const targetId = link.getAttribute('href').substring(1);
       const targetHeading = document.getElementById(targetId);
 
       if (targetHeading) {
-        console.log('TOC: Creating ScrollTrigger for:', targetId);
         ScrollTrigger.create({
           trigger: targetHeading,
           start: 'top 20%',
@@ -233,22 +211,17 @@ function blogtemplate() {
                 }
               : 'bottom 20%',
           onToggle: (self) => {
-            console.log('TOC: ScrollTrigger toggle for:', targetId, 'Active:', self.isActive);
             if (self.isActive) {
               updateActiveTocLink(targetId);
             }
           },
         });
-      } else {
-        console.log('TOC: Could not find target heading for:', targetId);
       }
     });
 
     // Refresh ScrollTrigger after TOC is created
     setTimeout(() => {
-      console.log('TOC: Refreshing ScrollTriggers');
       ScrollTrigger.refresh();
-      console.log('TOC: Initialization complete');
     }, 100);
   });
 
