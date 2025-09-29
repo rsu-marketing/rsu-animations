@@ -245,6 +245,10 @@ function blogtemplate() {
         start: 'bot 85%',
         toggleActions: 'play none none reverse',
       },
+      onComplete: () => {
+        const wrapper = document.querySelector('.c-template-blog-wrapper');
+        if (wrapper) wrapper.style.transform = '';
+      },
     }
   );
 
