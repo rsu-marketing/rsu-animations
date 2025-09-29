@@ -15,95 +15,6 @@ function blogtemplate() {
       normalizeScroll: true,
     });
 
-    let isCmdF = false;
-
-    document.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'f') {
-        isCmdF = true;
-        if (smoother) {
-          smoother.paused(true); // pause smoother, native scroll works
-        }
-      }
-    });
-
-    document.addEventListener('selectionchange', () => {
-      if (isCmdF && smoother) {
-        // optionally sync smoother position if needed
-        smoother.scrollTop();
-      }
-    });
-
-    document.addEventListener('click', () => {
-      if (isCmdF && smoother) {
-        smoother.paused(false); // resume smoother
-        isCmdF = false;
-      }
-    });
-
-    // Sticky TOC sidebar
-    const tocSidebar = document.querySelector('.c-tos-sidebar');
-    if (window.innerWidth >= 768) {
-      if (tocSidebar) {
-        ScrollTrigger.create({
-          trigger: tocSidebar,
-          start: 'top 8rem',
-          endTrigger: tocSidebar.parentElement,
-          end: () => `bottom ${tocSidebar.offsetHeight + 150}px`,
-          pin: true,
-          pinSpacing: false,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        });
-      }
-    }
-    // Function to get all current TOC links dynamically
-    function getTocLinks() {
-      return document.querySelectorAll('.c-toc-link');
-    }
-
-    // Smooth scroll on click
-    function attachClickHandlers() {
-      getTocLinks().forEach((link) => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetId = link.getAttribute('href').replace('#', '');
-          const targetEl = document.getElementById(targetId);
-          if (targetEl) {
-            smoother.scrollTo(targetEl, {
-              duration: 1,
-              offsetY: 20,
-              onComplete: () => ScrollTrigger.refresh(true),
-            });
-
-            // Remove active from all and add to clicked
-            getTocLinks().forEach((l) => l.classList.remove('is-active'));
-            link.classList.add('is-active');
-          }
-        });
-      });
-    }
-
-    attachClickHandlers();
-
-    // Scroll-based highlighting
-    const headings = document.querySelectorAll('h2[id], h3[id]');
-    headings.forEach((heading) => {
-      ScrollTrigger.create({
-        trigger: heading,
-        scroller: smoother?.content || window, // important for ScrollSmoother
-        start: 'top center',
-        end: 'bottom center',
-        onEnter: () => setActiveLink(heading.id),
-        onEnterBack: () => setActiveLink(heading.id),
-      });
-    });
-
-    function setActiveLink(id) {
-      getTocLinks().forEach((link) => {
-        link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`);
-      });
-    }
-
     ScrollTrigger.refresh();
   });
 
@@ -160,6 +71,118 @@ function blogtemplate() {
       navBg.style.display = 'none';
       lastOpenedDropdown = null; // Reinitialise the last open dropdown
     });
+  });
+
+  // TOC Sidebar Functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const tocContent = document.querySelector('.c-toc-link-content');
+    const referenceLinkWrapper = document.querySelector('.c-toc-link-wrapper');
+
+    if (!tocContent || !referenceLinkWrapper) return;
+
+    // Get the blog rich text content (assuming it has a specific class)
+    const blogContent = document.querySelector('.c-template-blog-wrapper, .blog-rich-text, .w-richtext');
+    if (!blogContent) return;
+
+    // Function to create slug from text
+    function createSlug(text) {
+      return text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '') // Remove special characters
+        .replace(/\s+/g, '-') // Replace spaces with dashes
+        .replace(/-+/g, '-') // Replace multiple dashes with single dash
+        .trim();
+    }
+
+    // Get all H2 headings
+    const headings = blogContent.querySelectorAll('h2');
+    if (headings.length === 0) return;
+
+    // Store original reference wrapper for cloning
+    const originalWrapper = referenceLinkWrapper.cloneNode(true);
+
+    // Clear existing TOC content
+    tocContent.innerHTML = '';
+
+    // Create TOC links for each heading
+    headings.forEach((heading, index) => {
+      const headingText = heading.textContent.trim();
+      const slug = createSlug(headingText);
+
+      // Add ID to heading for scroll target
+      heading.id = slug;
+
+      // Clone the reference wrapper
+      const newWrapper = originalWrapper.cloneNode(true);
+      const link = newWrapper.querySelector('.c-toc-link');
+
+      if (link) {
+        link.textContent = headingText;
+        link.href = `#${slug}`;
+
+        // Add click handler for smooth scrolling
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+
+          // Use ScrollSmoother if available
+          const smoother = ScrollSmoother.get();
+          if (smoother) {
+            smoother.scrollTo(`#${slug}`, true, 'top top');
+          } else {
+            // Fallback to native smooth scrolling
+            heading.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+
+          // Update active state
+          updateActiveTocLink(slug);
+        });
+      }
+
+      tocContent.appendChild(newWrapper);
+    });
+
+    // Function to update active TOC link based on scroll position
+    function updateActiveTocLink(activeSlug) {
+      const allLinks = tocContent.querySelectorAll('.c-toc-link');
+      allLinks.forEach(link => {
+        if (link.getAttribute('href') === `#${activeSlug}`) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    // Set up scroll-triggered active state updates
+    const tocLinks = tocContent.querySelectorAll('.c-toc-link');
+    tocLinks.forEach((link, index) => {
+      const targetId = link.getAttribute('href').substring(1);
+      const targetHeading = document.getElementById(targetId);
+
+      if (targetHeading) {
+        ScrollTrigger.create({
+          trigger: targetHeading,
+          start: 'top 20%',
+          end: index < headings.length - 1 ? () => {
+            const nextHeading = headings[index + 1];
+            return nextHeading ? `top 20%` : 'bottom 20%';
+          } : 'bottom 20%',
+          onToggle: (self) => {
+            if (self.isActive) {
+              updateActiveTocLink(targetId);
+            }
+          }
+        });
+      }
+    });
+
+    // Refresh ScrollTrigger after TOC is created
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
   });
 
   // anim txt hero
