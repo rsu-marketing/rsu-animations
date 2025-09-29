@@ -4,19 +4,19 @@ import { ScrollSmoother } from './gsap/all.js';
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 function blogtemplate() {
-  // smooth scroll
-  document.addEventListener('DOMContentLoaded', () => {
-    let smoother = ScrollSmoother.create({
-      wrapper: '.smooth-wrapper',
-      content: '.smooth-content',
-      smooth: 1,
-      smoothTouch: 0.1,
-      effects: true,
-      normalizeScroll: true,
-    });
+  // // smooth scroll
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   let smoother = ScrollSmoother.create({
+  //     wrapper: '.smooth-wrapper',
+  //     content: '.smooth-content',
+  //     smooth: 1,
+  //     smoothTouch: 0.1,
+  //     effects: true,
+  //     normalizeScroll: true,
+  //   });
 
-    ScrollTrigger.refresh();
-  });
+  //   ScrollTrigger.refresh();
+  // });
 
   // refresh scrolltrigger
   let links = document.querySelectorAll('.cc-refresh');
@@ -88,12 +88,7 @@ function blogtemplate() {
 
     if (!blogContent) {
       // Try fallback selectors
-      const fallbackSelectors = [
-        '.w-richtext',
-        '.blog-rich-text',
-        '.c-template-blog-wrapper .rich-text',
-        '.rich-text'
-      ];
+      const fallbackSelectors = ['.w-richtext', '.blog-rich-text', '.c-template-blog-wrapper .rich-text', '.rich-text'];
 
       for (const selector of fallbackSelectors) {
         blogContent = document.querySelector(selector);
@@ -118,7 +113,7 @@ function blogtemplate() {
 
     // Get all H2 headings, filtering out those in .tldr or .text-box containers
     const allHeadings = blogContent.querySelectorAll('h2');
-    const headings = Array.from(allHeadings).filter(heading => {
+    const headings = Array.from(allHeadings).filter((heading) => {
       // Check if any parent has .tldr or .text-box class
       let parent = heading.parentElement;
       while (parent && parent !== blogContent) {
