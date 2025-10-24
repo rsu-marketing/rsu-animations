@@ -52,9 +52,8 @@ export function logoGridAnimation() {
 export function testimonialsAnimation() {
   const testimonials = document.querySelectorAll('.c-testimonial-container');
   const currentPage = window.location.pathname;
-  const timestamp = new Date().toISOString();
 
-  console.log(`%c[TESTIMONIALS-DEBUG] 🟢 ${timestamp} - Shared testimonials animation initialized on page: ${currentPage}`, 'color: #4CAF50; font-weight: bold');
+  console.log(`%c[TESTIMONIALS-DEBUG] 🟢 Shared testimonials animation initialized on page: ${currentPage}`, 'color: #4CAF50; font-weight: bold');
   console.log(`%c[TESTIMONIALS-DEBUG] 🔍 Found ${testimonials.length} testimonial containers in DOM`, 'color: #2196F3; font-weight: bold');
 
   if (testimonials.length === 0) {
@@ -82,9 +81,6 @@ export function testimonialsAnimation() {
     // large
     '(min-width: 992px)': function () {
       console.log(`%c[TESTIMONIALS-DEBUG] 📱 Media query match: LARGE (min-width: 992px)`, 'color: #4CAF50; font-weight: bold');
-
-      const delays = testimonials.map((_, index) => index * 0.1);
-      console.log(`%c[TESTIMONIALS-DEBUG] ⏱️  Animation delays: [${delays.map(d => d + 's').join(', ')}] (stagger: 0.1s)`, 'color: #FF9800; font-weight: bold');
       console.log(`%c[TESTIMONIALS-DEBUG] 🎬 Animation config: opacity: 0→1, y: 6.25rem→0, duration: 0.8s, ease: power3.out`, 'color: #2196F3; font-weight: bold');
 
       testimonials.forEach((element, index) => {
@@ -105,7 +101,7 @@ export function testimonialsAnimation() {
           },
         };
 
-        console.log(`%c[TESTIMONIALS-DEBUG] 🎯 Large breakpoint - Creating animation for testimonial ${index + 1} with delay ${animationConfig.delay}s`, 'color: #607D8B; font-weight: bold');
+        console.log(`%c[TESTIMONIALS-DEBUG] 🎯 Large breakpoint - Creating animation for testimonial ${index + 1}`, 'color: #607D8B; font-weight: bold');
 
         gsap.from(element, animationConfig);
       });
@@ -113,9 +109,6 @@ export function testimonialsAnimation() {
     // medium
     '(min-width: 768px) and (max-width: 991px)': function () {
       console.log(`%c[TESTIMONIALS-DEBUG] 📱 Media query match: MEDIUM (768px - 991px)`, 'color: #2196F3; font-weight: bold');
-
-      const delays = testimonials.map((_, index) => index * 0.08);
-      console.log(`%c[TESTIMONIALS-DEBUG] ⏱️  Animation delays: [${delays.map(d => d + 's').join(', ')}] (stagger: 0.08s)`, 'color: #FF9800; font-weight: bold');
       console.log(`%c[TESTIMONIALS-DEBUG] 🎬 Animation config: opacity: 0→1, y: 5rem→0, duration: 0.7s, ease: power3.out`, 'color: #2196F3; font-weight: bold');
 
       testimonials.forEach((element, index) => {
@@ -136,7 +129,7 @@ export function testimonialsAnimation() {
           },
         };
 
-        console.log(`%c[TESTIMONIALS-DEBUG] 🎯 Medium breakpoint - Creating animation for testimonial ${index + 1} with delay ${animationConfig.delay}s`, 'color: #607D8B; font-weight: bold');
+        console.log(`%c[TESTIMONIALS-DEBUG] 🎯 Medium breakpoint - Creating animation for testimonial ${index + 1}`, 'color: #607D8B; font-weight: bold');
 
         gsap.from(element, animationConfig);
       });
@@ -144,9 +137,6 @@ export function testimonialsAnimation() {
     // small
     '(max-width: 480px)': function () {
       console.log(`%c[TESTIMONIALS-DEBUG] 📱 Media query match: SMALL (max-width: 480px)`, 'color: #FF9800; font-weight: bold');
-
-      const delays = testimonials.map((_, index) => index * 0.05);
-      console.log(`%c[TESTIMONIALS-DEBUG] ⏱️  Animation delays: [${delays.map(d => d + 's').join(', ')}] (stagger: 0.05s)`, 'color: #FF9800; font-weight: bold');
       console.log(`%c[TESTIMONIALS-DEBUG] 🎬 Animation config: opacity: 0→1, y: 4rem→0, duration: 0.6s, ease: power2.out`, 'color: #2196F3; font-weight: bold');
 
       testimonials.forEach((element, index) => {
@@ -167,7 +157,7 @@ export function testimonialsAnimation() {
           },
         };
 
-        console.log(`%c[TESTIMONIALS-DEBUG] 🎯 Small breakpoint - Creating animation for testimonial ${index + 1} with delay ${animationConfig.delay}s`, 'color: #607D8B; font-weight: bold');
+        console.log(`%c[TESTIMONIALS-DEBUG] 🎯 Small breakpoint - Creating animation for testimonial ${index + 1}`, 'color: #607D8B; font-weight: bold');
 
         gsap.from(element, animationConfig);
       });
