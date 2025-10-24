@@ -1,6 +1,7 @@
 //import gsap from "../dist/gsap.js";
 import { ScrollTrigger } from "./gsap/all.js";
 import { ScrollSmoother } from "./gsap/all.js";
+import { initSharedAnimations } from "./sharedAnimations.js";
 
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -446,25 +447,9 @@ function home() {
       toggleActions: "play none none reverse",
     }
   });
-  // TESTIMONIAL 
-
-  // Testimonial animation
-  window.addEventListener('load', function () {
-    gsap.utils.toArray(".c-testimonial-container").forEach((element, index) => {
-      gsap.from(element, {
-        opacity: 0,
-        y: "6.25rem",
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: element,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-          stagger: 0.2 * index
-        }
-      });
-    });
-  });
+  // TESTIMONIAL ANIMATION - REMOVED
+  // Page-specific testimonial animation removed to prevent conflicts with shared animations
+  // Testimonials now handled by sharedAnimations.js for consistent behavior across all pages
 
   // FOOTER ARTICLE ANIMATION
 
@@ -1230,6 +1215,8 @@ function home() {
     },
   })
 
+  // Initialize shared animations for consistent testimonial behavior across all pages
+  initSharedAnimations();
 
 }
 

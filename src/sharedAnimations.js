@@ -51,14 +51,44 @@ export function logoGridAnimation() {
 // Testimonials Animation
 export function testimonialsAnimation() {
   const testimonials = document.querySelectorAll('.c-testimonial-container');
-  if (testimonials.length === 0) return;
+  const currentPage = window.location.pathname;
+  const timestamp = new Date().toISOString();
+
+  console.log(`%c[TESTIMONIALS-DEBUG] 🟢 ${timestamp} - Shared testimonials animation initialized on page: ${currentPage}`, 'color: #4CAF50; font-weight: bold');
+  console.log(`%c[TESTIMONIALS-DEBUG] 🔍 Found ${testimonials.length} testimonial containers in DOM`, 'color: #2196F3; font-weight: bold');
+
+  if (testimonials.length === 0) {
+    console.log(`%c[TESTIMONIALS-DEBUG] ⚠️  No testimonial containers found - skipping animation`, 'color: #FF9800; font-weight: bold');
+    return;
+  }
+
+  // Log each testimonial element for debugging
+  testimonials.forEach((element, index) => {
+    console.log(`%c[TESTIMONIALS-DEBUG] 📍 Testimonial ${index + 1}:`, 'color: #607D8B', element);
+  });
+
+  // Check for potential page-specific animations that might conflict
+  const hasPageSpecificAnimations = window.testimonialsPageAnimationInitialized || false;
+  if (hasPageSpecificAnimations) {
+    console.log(`%c[TESTIMONIALS-DEBUG] ⚠️  CONFLICT DETECTED: Page-specific animations also running!`, 'color: #F44336; font-weight: bold; background: #ffebee; padding: 2px;');
+  }
 
   // Setup testimonials animation with responsive breakpoints
+  console.log(`%c[TESTIMONIALS-DEBUG] 📱 Setting up ScrollTrigger.matchMedia for responsive breakpoints`, 'color: #9C27B0; font-weight: bold');
+
+  const startTime = performance.now();
+
   ScrollTrigger.matchMedia({
     // large
     '(min-width: 992px)': function () {
+      console.log(`%c[TESTIMONIALS-DEBUG] 📱 Media query match: LARGE (min-width: 992px)`, 'color: #4CAF50; font-weight: bold');
+
+      const delays = testimonials.map((_, index) => index * 0.1);
+      console.log(`%c[TESTIMONIALS-DEBUG] ⏱️  Animation delays: [${delays.map(d => d + 's').join(', ')}] (stagger: 0.1s)`, 'color: #FF9800; font-weight: bold');
+      console.log(`%c[TESTIMONIALS-DEBUG] 🎬 Animation config: opacity: 0→1, y: 6.25rem→0, duration: 0.8s, ease: power3.out`, 'color: #2196F3; font-weight: bold');
+
       testimonials.forEach((element, index) => {
-        gsap.from(element, {
+        const animationConfig = {
           opacity: 0,
           y: '6.25rem',
           duration: 0.8,
@@ -68,14 +98,28 @@ export function testimonialsAnimation() {
             trigger: element,
             start: 'top 80%',
             toggleActions: 'restart none none reverse',
+            onEnter: () => console.log(`%c[TESTIMONIALS-DEBUG] ▶️  Large breakpoint - Testimonial ${index + 1} animation started`, 'color: #4CAF50; font-weight: bold'),
+            onLeave: () => console.log(`%c[TESTIMONIALS-DEBUG] ⏸️  Large breakpoint - Testimonial ${index + 1} animation reversed`, 'color: #FF9800; font-weight: bold'),
+            onEnterBack: () => console.log(`%c[TESTIMONIALS-DEBUG] ⏮️  Large breakpoint - Testimonial ${index + 1} animation restarted`, 'color: #2196F3; font-weight: bold'),
+            onLeaveBack: () => console.log(`%c[TESTIMONIALS-DEBUG] ⏭️  Large breakpoint - Testimonial ${index + 1} animation left backward`, 'color: #9C27B0; font-weight: bold'),
           },
-        });
+        };
+
+        console.log(`%c[TESTIMONIALS-DEBUG] 🎯 Large breakpoint - Creating animation for testimonial ${index + 1} with delay ${animationConfig.delay}s`, 'color: #607D8B; font-weight: bold');
+
+        gsap.from(element, animationConfig);
       });
     },
     // medium
     '(min-width: 768px) and (max-width: 991px)': function () {
+      console.log(`%c[TESTIMONIALS-DEBUG] 📱 Media query match: MEDIUM (768px - 991px)`, 'color: #2196F3; font-weight: bold');
+
+      const delays = testimonials.map((_, index) => index * 0.08);
+      console.log(`%c[TESTIMONIALS-DEBUG] ⏱️  Animation delays: [${delays.map(d => d + 's').join(', ')}] (stagger: 0.08s)`, 'color: #FF9800; font-weight: bold');
+      console.log(`%c[TESTIMONIALS-DEBUG] 🎬 Animation config: opacity: 0→1, y: 5rem→0, duration: 0.7s, ease: power3.out`, 'color: #2196F3; font-weight: bold');
+
       testimonials.forEach((element, index) => {
-        gsap.from(element, {
+        const animationConfig = {
           opacity: 0,
           y: '5rem',
           duration: 0.7,
@@ -85,14 +129,28 @@ export function testimonialsAnimation() {
             trigger: element,
             start: 'top 85%',
             toggleActions: 'restart none none reverse',
+            onEnter: () => console.log(`%c[TESTIMONIALS-DEBUG] ▶️  Medium breakpoint - Testimonial ${index + 1} animation started`, 'color: #4CAF50; font-weight: bold'),
+            onLeave: () => console.log(`%c[TESTIMONIALS-DEBUG] ⏸️  Medium breakpoint - Testimonial ${index + 1} animation reversed`, 'color: #FF9800; font-weight: bold'),
+            onEnterBack: () => console.log(`%c[TESTIMONIALS-DEBUG] ⏮️  Medium breakpoint - Testimonial ${index + 1} animation restarted`, 'color: #2196F3; font-weight: bold'),
+            onLeaveBack: () => console.log(`%c[TESTIMONIALS-DEBUG] ⏭️  Medium breakpoint - Testimonial ${index + 1} animation left backward`, 'color: #9C27B0; font-weight: bold'),
           },
-        });
+        };
+
+        console.log(`%c[TESTIMONIALS-DEBUG] 🎯 Medium breakpoint - Creating animation for testimonial ${index + 1} with delay ${animationConfig.delay}s`, 'color: #607D8B; font-weight: bold');
+
+        gsap.from(element, animationConfig);
       });
     },
     // small
     '(max-width: 480px)': function () {
+      console.log(`%c[TESTIMONIALS-DEBUG] 📱 Media query match: SMALL (max-width: 480px)`, 'color: #FF9800; font-weight: bold');
+
+      const delays = testimonials.map((_, index) => index * 0.05);
+      console.log(`%c[TESTIMONIALS-DEBUG] ⏱️  Animation delays: [${delays.map(d => d + 's').join(', ')}] (stagger: 0.05s)`, 'color: #FF9800; font-weight: bold');
+      console.log(`%c[TESTIMONIALS-DEBUG] 🎬 Animation config: opacity: 0→1, y: 4rem→0, duration: 0.6s, ease: power2.out`, 'color: #2196F3; font-weight: bold');
+
       testimonials.forEach((element, index) => {
-        gsap.from(element, {
+        const animationConfig = {
           opacity: 0,
           y: '4rem',
           duration: 0.6,
@@ -102,11 +160,26 @@ export function testimonialsAnimation() {
             trigger: element,
             start: 'top 90%',
             toggleActions: 'restart none none reverse',
+            onEnter: () => console.log(`%c[TESTIMONIALS-DEBUG] ▶️  Small breakpoint - Testimonial ${index + 1} animation started`, 'color: #4CAF50; font-weight: bold'),
+            onLeave: () => console.log(`%c[TESTIMONIALS-DEBUG] ⏸️  Small breakpoint - Testimonial ${index + 1} animation reversed`, 'color: #FF9800; font-weight: bold'),
+            onEnterBack: () => console.log(`%c[TESTIMONIALS-DEBUG] ⏮️  Small breakpoint - Testimonial ${index + 1} animation restarted`, 'color: #2196F3; font-weight: bold'),
+            onLeaveBack: () => console.log(`%c[TESTIMONIALS-DEBUG] ⏭️  Small breakpoint - Testimonial ${index + 1} animation left backward`, 'color: #9C27B0; font-weight: bold'),
           },
-        });
+        };
+
+        console.log(`%c[TESTIMONIALS-DEBUG] 🎯 Small breakpoint - Creating animation for testimonial ${index + 1} with delay ${animationConfig.delay}s`, 'color: #607D8B; font-weight: bold');
+
+        gsap.from(element, animationConfig);
       });
     },
   });
+
+  // Log completion and performance metrics
+  const endTime = performance.now();
+  const setupTime = endTime - startTime;
+
+  console.log(`%c[TESTIMONIALS-DEBUG] ✅ Shared testimonials animation setup completed in ${setupTime.toFixed(2)}ms`, 'color: #4CAF50; font-weight: bold; background: #e8f5e8; padding: 2px;');
+  console.log(`%c[TESTIMONIALS-DEBUG] 📊 Performance metrics - Setup: ${setupTime.toFixed(2)}ms, Elements processed: ${testimonials.length}`, 'color: #607D8B; font-weight: bold');
 }
 
 // CC-Split Text Animation

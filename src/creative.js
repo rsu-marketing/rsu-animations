@@ -154,23 +154,9 @@ function creative() {
   });
 
 
-  // TESTIMONIAL ANIMATION
-  window.addEventListener('load', function () {
-    gsap.utils.toArray(".c-testimonial-container").forEach((element, index) => {
-      gsap.from(element, {
-        opacity: 0,
-        y: "6.25rem",
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: element,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-          stagger: 0.2 * index
-        }
-      });
-    });
-  });
+  // TESTIMONIAL ANIMATION - REMOVED
+  // Page-specific testimonial animation removed to prevent conflicts with shared animations
+  // Testimonials now handled by sharedAnimations.js for consistent behavior across all pages
 
   gsap.fromTo(".c-title-l.cc-article", {
     y: '5rem',
