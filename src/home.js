@@ -5,20 +5,6 @@ import yellowBallAnimation from "./yellowBallAnimation.js";
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 function home() {
 
-  // smooth scroll
-  document.addEventListener('DOMContentLoaded', () => {
-    let smoother = ScrollSmoother.create({
-      wrapper: '.smooth-wrapper',
-      content: '.smooth-content',
-      smooth: 1,
-      smoothTouch: 0.1,
-      effects: true
-    });
-
-    ScrollTrigger.refresh();
-
-  });
-
   // refresh scrolltrigger
   let links = document.querySelectorAll(".cc-refresh")
   links.forEach(link => {
@@ -30,8 +16,7 @@ function home() {
   })
 
   // BG nav dropdown open
-
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener('DOMContentLoaded', () => {
     const dropdowns = document.querySelectorAll(".c-dropdown");
     const navBg = document.querySelector(".c-nav-bg-open");
     let lastOpenedDropdown = null;
@@ -107,7 +92,7 @@ function home() {
     opacity: 1,
   });
 
-  // split type 
+  // split type
   window.onload = function () {
 
     var container = document.querySelector('[split-container]');
@@ -118,7 +103,6 @@ function home() {
       tagName: 'span'
     })
 
-
     gsap.from('[split] .line', {
       y: '100%',
       opacity: 0,
@@ -127,6 +111,20 @@ function home() {
       stagger: 0.1,
       ease: 'power1.out',
     })
+
+    // Initialize ScrollSmoother after all DOM content is loaded
+    let smoother = ScrollSmoother.create({
+      wrapper: '.smooth-wrapper',
+      content: '.smooth-content',
+      smooth: 1,
+      smoothTouch: 0.1,
+      effects: true
+    });
+
+    // Wait for next frame to ensure DOM stability before refreshing
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+    });
   };
 
   
@@ -433,72 +431,35 @@ function home() {
 
 
   // FOOTER CHART ANIM
+  // Add element availability validation before creating ScrollTriggers
+  const chartFooterWrapper = document.querySelector(".c-chart-footer-wrapper");
+  const footerChartElements = [
+    { selector: ".c-img-chart-footer.cc-one", y: '-11rem' },
+    { selector: ".c-img-chart-footer.cc-two", y: '-20rem' },
+    { selector: ".c-img-chart-footer.cc-three", y: '-7rem' },
+    { selector: ".c-img-chart-footer.cc-four", y: '-2rem' },
+    { selector: ".c-img-chart-footer.cc-five", y: '-6rem' },
+    { selector: ".c-img-chart-footer.cc-six", y: '-11rem' }
+  ];
 
-  gsap.to(".c-img-chart-footer.cc-one", {
-    scrollTrigger: {
-      trigger: ".c-chart-footer-wrapper",
-      start: "top 100%",
-      end: "bottom -10%",
-      scrub: true,
-    },
-    y: '-11rem',
-    ease: "quart.easeOut",
-  });
-
-  gsap.to(".c-img-chart-footer.cc-two", {
-    scrollTrigger: {
-      trigger: ".c-chart-footer-wrapper",
-      start: "top 100%",
-      end: "bottom -10%",
-      scrub: true,
-    },
-    y: '-20rem',
-    ease: "quart.easeOut",
-  });
-
-  gsap.to(".c-img-chart-footer.cc-three", {
-    scrollTrigger: {
-      trigger: ".c-chart-footer-wrapper",
-      start: "top 100%",
-      end: "bottom -10%",
-      scrub: true,
-    },
-    y: '-7rem',
-    ease: "quart.easeOut",
-  });
-
-  gsap.to(".c-img-chart-footer.cc-four", {
-    scrollTrigger: {
-      trigger: ".c-chart-footer-wrapper",
-      start: "top 100%",
-      end: "bottom -10%",
-      scrub: true,
-    },
-    y: '-2rem',
-    ease: "quart.easeOut",
-  });
-
-  gsap.to(".c-img-chart-footer.cc-five", {
-    scrollTrigger: {
-      trigger: ".c-chart-footer-wrapper",
-      start: "top 100%",
-      end: "bottom -10%",
-      scrub: true,
-    },
-    y: '-6rem',
-    ease: "quart.easeOut",
-  });
-
-  gsap.to(".c-img-chart-footer.cc-six", {
-    scrollTrigger: {
-      trigger: ".c-chart-footer-wrapper",
-      start: "top 100%",
-      end: "bottom -10%",
-      scrub: true,
-    },
-    y: '-11rem',
-    ease: "quart.easeOut",
-  });
+  // Only create footer chart animations if elements exist
+  if (chartFooterWrapper) {
+    footerChartElements.forEach((chartElement) => {
+      const element = document.querySelector(chartElement.selector);
+      if (element) {
+        gsap.to(chartElement.selector, {
+          scrollTrigger: {
+            trigger: ".c-chart-footer-wrapper",
+            start: "top 100%",
+            end: "bottom -10%",
+            scrub: true,
+          },
+          y: chartElement.y,
+          ease: "quart.easeOut",
+        });
+      }
+    });
+  }
 
 
   // Initialize yellow ball animation (global)
