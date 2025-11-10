@@ -417,7 +417,7 @@ export function talentsListSwiper() {
     breakpoints: {
       // Mobile: 1 slide centered with partial preview
       0: {
-        slidesPerView: 1,
+        slidesPerView: 2,
         spaceBetween: 25,
         centeredSlides: true,
       },
