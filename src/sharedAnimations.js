@@ -387,6 +387,9 @@ export function talentsListSwiper() {
     centeredSlides: true,
     loop: true,
 
+    autoHeight: false, // Disable auto-height
+    roundLengths: true, // Prevent fractional pixel issues
+
     // Navigation
     navigation: {
       nextEl: '.swiper-button-next',
