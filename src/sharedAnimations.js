@@ -415,13 +415,13 @@ export function talentsListSwiper() {
       // Mobile: 1 slide centered with partial preview
       0: {
         slidesPerView: 1,
-        spaceBetween: 16,
+        spaceBetween: 25,
         centeredSlides: true,
       },
       // Tablet: 2 slides with partial preview
       768: {
         slidesPerView: 2,
-        spaceBetween: 20,
+        spaceBetween: 25,
         centeredSlides: true,
       },
       // Desktop: 3 slides with partial preview
@@ -443,95 +443,6 @@ export function talentsListSwiper() {
       nextSlideMessage: 'Next talent',
     },
   });
-
-  // Add custom CSS for partial slide preview effect
-  const style = document.createElement('style');
-  style.textContent = `
-    .c-talents-list.swiper {
-      padding: 40px 0;
-      overflow: visible;
-    }
-
-    .c-talents-list .swiper-slide {
-      opacity: 0.6;
-      transform: scale(0.85);
-      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .c-talents-list .swiper-slide-active {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .c-talents-list .swiper-slide-next,
-    .c-talents-list .swiper-slide-prev {
-      opacity: 0.8;
-      transform: scale(0.9);
-    }
-
-    /* Navigation arrows */
-    .c-talents-list + .swiper-navigation {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 30px;
-    }
-
-    .c-talents-list .swiper-button-next,
-    .c-talents-list .swiper-button-prev {
-      position: relative;
-      top: auto;
-      left: auto;
-      right: auto;
-      margin: 0;
-      background: rgba(0, 0, 0, 0.1);
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .c-talents-list .swiper-button-next:hover,
-    .c-talents-list .swiper-button-prev:hover {
-      background: rgba(0, 0, 0, 0.2);
-      transform: scale(1.1);
-    }
-
-    .c-talents-list .swiper-button-next::after,
-    .c-talents-list .swiper-button-prev::after {
-      font-size: 18px;
-      color: #333;
-    }
-
-    /* Pagination dots */
-    .c-talents-list .swiper-pagination {
-      position: relative;
-      bottom: auto;
-      top: auto;
-      margin-top: 20px;
-    }
-
-    .c-talents-list .swiper-pagination-bullet {
-      width: 10px;
-      height: 10px;
-      background: rgba(0, 0, 0, 0.3);
-      opacity: 1;
-      transition: all 0.3s ease;
-    }
-
-    .c-talents-list .swiper-pagination-bullet-active {
-      background: #000;
-      transform: scale(1.3);
-    }
-  `;
-
-  // Add styles to head if not already added
-  if (!document.querySelector('#talents-swiper-styles')) {
-    style.id = 'talents-swiper-styles';
-    document.head.appendChild(style);
-  }
 
   console.log('Talents list swiper initialized successfully');
 }
