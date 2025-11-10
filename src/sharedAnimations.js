@@ -398,7 +398,7 @@ export function talentsListSwiper() {
 
     // Pagination
     pagination: {
-      el: 'c-talents-pagination.swiper-pagination',
+      el: '.c-talents-pagination.swiper-pagination',
       clickable: true,
       type: 'bullets',
     },
