@@ -364,7 +364,7 @@ export function swiperAnimation() {
 
 // Talents List Swiper Animation
 export function talentsListSwiper() {
-  const talentsListElement = document.querySelector('.c-talents-list');
+  const talentsListElement = document.querySelector('.c-talents-slider');
   if (!talentsListElement) return;
 
   // Check if Swiper library is available
@@ -373,17 +373,14 @@ export function talentsListSwiper() {
     return;
   }
 
-  // Add necessary Swiper classes to the existing structure
-  talentsListElement.classList.add('swiper');
-
   // Add swiper-slide class to each talent item
   const talentItems = talentsListElement.querySelectorAll('.c-talent-item');
-  talentItems.forEach(item => {
+  talentItems.forEach((item) => {
     item.classList.add('swiper-slide');
   });
 
   // Initialize Swiper with responsive configuration
-  const swiper = new Swiper('.c-talents-list', {
+  const swiper = new Swiper('.c-talents-slider', {
     // Core configuration
     slidesPerView: 1,
     spaceBetween: 20,
