@@ -91,6 +91,28 @@ function about() {
 
   // ANIM WRAPPER FOUNDER COMMENT
 
+  // Staggered split text animation for .cc-split elements
+  const splitElements = document.querySelectorAll('.c-letter-container .cc-split');
+  splitElements.forEach((element, index) => {
+    const split = new SplitText(element, {
+      type: 'lines,words,chars',
+      linesClass: 'split-line',
+    });
+
+    gsap.from(split.words, {
+      duration: 0.5,
+      opacity: 0,
+      y: 5,
+      stagger: 0.1,
+      delay: index * 0.3, // Stagger each .cc-split element
+      scrollTrigger: {
+        trigger: element,
+        toggleActions: 'restart none none reverse',
+        start: 'top 80%',
+      },
+    });
+  });
+
   // Move wrapper
 
   gsap.fromTo(".c-letter-wrapper", {

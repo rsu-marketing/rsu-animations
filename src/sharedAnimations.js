@@ -18,7 +18,7 @@ export function logoGridAnimation() {
       delay: 1.5,
       duration: 0.8,
       opacity: 1,
-    }
+    },
   );
 
   // Scroll animations for each collection list wrapper
@@ -115,7 +115,11 @@ export function splitTextAnimation() {
   const splitSelectors = ['.cc-split', '.cc-split-one', '.cc-split-two'];
 
   splitSelectors.forEach((selector) => {
-    const elements = document.querySelectorAll(selector);
+    // Skip .cc-split elements inside .c-letter-container (handled in about.js)
+    let elements = document.querySelectorAll(selector);
+    if (selector === '.cc-split') {
+      elements = document.querySelectorAll(`${selector}:not(.body--about ${selector})`);
+    }
     if (elements.length === 0) return;
 
     function setupSplits() {
