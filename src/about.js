@@ -92,26 +92,46 @@ function about() {
   // ANIM WRAPPER FOUNDER COMMENT
 
   // Staggered split text animation for .cc-split elements (sequential)
-  ScrollTrigger.batch('.c-letter-container .cc-split', {
-    onEnter: (elements) => {
-      const tl = gsap.timeline();
+  const splitElements = document.querySelectorAll('.c-letter-container .cc-split');
 
-      elements.forEach((element) => {
-        const split = new SplitText(element, {
-          type: 'lines,words,chars',
-          linesClass: 'split-line',
-        });
+  if (splitElements.length > 0) {
+    // Hide elements initially
+    gsap.set(splitElements, { opacity: 0 });
 
-        tl.from(split.words, {
-          duration: 0.5,
-          opacity: 0,
-          y: 5,
-          stagger: 0.05,
-        });
+    // Create splits and timeline
+    const splits = [];
+    splitElements.forEach((element) => {
+      const split = new SplitText(element, {
+        type: 'lines,words,chars',
+        linesClass: 'split-line',
       });
-    },
-    start: 'top 80%',
-  });
+      splits.push(split);
+    });
+
+    // Create timeline with single ScrollTrigger
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.c-letter-container',
+        start: 'top 80%',
+        toggleActions: 'play none none reverse',
+      }
+    });
+
+    // Add each paragraph's animation to timeline sequentially
+    splits.forEach((split, index) => {
+      // Fade in container, then animate words
+      tl.to(splitElements[index], {
+        opacity: 1,
+        duration: 0.1,
+      })
+      .from(split.words, {
+        opacity: 0,
+        y: 5,
+        duration: 0.4,
+        stagger: 0.05,
+      }, '<'); // Start at same time as opacity fade
+    });
+  }
 
   // Move wrapper
 
