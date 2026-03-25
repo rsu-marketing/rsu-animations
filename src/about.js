@@ -93,22 +93,28 @@ function about() {
   // ANIM WRAPPER FOUNDER COMMENT
 
   // Split text animation for founder comment
-  const splitElement = document.querySelector('.c-letter-container.cc-split');
+  const splitElements = document.querySelectorAll('.c-letter-container .cc-split');
 
-  if (splitElement) {
-    const split = new SplitText(splitElement, {
-      type: 'lines,words,chars',
-      linesClass: 'split-line',
+  if (splitElements.length > 0) {
+    // Collect all words from all split elements
+    const allWords = [];
+
+    splitElements.forEach((element) => {
+      const split = new SplitText(element, {
+        type: 'lines,words,chars',
+        linesClass: 'split-line',
+      });
+      allWords.push(...split.words);
     });
 
-    gsap.from(split.words, {
+    gsap.from(allWords, {
       opacity: 0,
       y: 5,
       duration: 0.4,
       stagger: 0.03,
       scrollTrigger: {
         trigger: '.c-letter-container',
-        start: 'top 90%',
+        start: 'bottom 85%',
         toggleActions: 'play none none none',
       },
     });
