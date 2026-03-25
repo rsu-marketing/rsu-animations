@@ -96,27 +96,27 @@ function about() {
   const splitElements = document.querySelectorAll('.c-letter-container .cc-split');
 
   if (splitElements.length > 0) {
-    // Collect all words from all split elements
-    const allWords = [];
-
     splitElements.forEach((element) => {
       const split = new SplitText(element, {
         type: 'lines,words,chars',
         linesClass: 'split-line',
       });
-      allWords.push(...split.words);
-    });
 
-    gsap.from(allWords, {
-      opacity: 0,
-      y: 5,
-      duration: 0.4,
-      stagger: 0.03,
-      scrollTrigger: {
-        trigger: element,
-        start: 'top 85%',
-        toggleActions: 'play none none none',
-      },
+      // Hide words initially
+      gsap.set(split.words, { opacity: 0, y: 5 });
+
+      // Animate when element enters viewport
+      gsap.to(split.words, {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        stagger: 0.03,
+        scrollTrigger: {
+          trigger: element,
+          start: 'bottom 90%',
+          toggleActions: 'play none none reverse',
+        },
+      });
     });
   }
 
