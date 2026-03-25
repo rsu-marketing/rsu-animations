@@ -106,9 +106,9 @@ function about() {
         isAnimating = true;
         const { split } = animationQueue.shift();
 
-        gsap.from(split.words, {
-          opacity: 0,
-          y: 5,
+        gsap.to(split.words, {
+          opacity: 1,
+          y: 0,
           duration: 0.4,
           stagger: 0.03,
           onComplete: () => {
@@ -127,8 +127,8 @@ function about() {
         // Hide words initially
         gsap.set(split.words, { opacity: 0, y: 5 });
 
-        // Add to queue when element enters viewport
-        ScrollTrigger.create({
+        // Create ScrollTrigger
+        const st = ScrollTrigger.create({
           trigger: element,
           start: 'bottom 90%',
           onEnter: () => {
@@ -140,6 +140,12 @@ function about() {
             gsap.set(split.words, { opacity: 0, y: 5 });
           },
         });
+
+        // If element is already in viewport, add to queue immediately
+        if (st.isActive) {
+          animationQueue.push({ split, element });
+          processQueue();
+        }
       });
     }
   });
