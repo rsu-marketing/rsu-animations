@@ -118,7 +118,7 @@ export function splitTextAnimation() {
     let elements = Array.from(document.querySelectorAll(selector));
     // Exclude .cc-split on about page (handled by about.js)
     if (selector === '.cc-split') {
-      elements = elements.filter(el => !el.closest('.body--about'));
+      elements = elements.filter((el) => !el.closest('.body--about'));
     }
     if (elements.length === 0) return;
 
@@ -338,7 +338,8 @@ export function swiperAnimation() {
 
     // Determine start position based on swiper type
     const isMobileSwiper = config.swiperSelector === '.swiper.cc-mob';
-    const startPosition = isMobileSwiper ? 'top 10%' : 'top top';
+    const isTalentSwiper = config.swiperSelector === '.swiper.cc-talent';
+    const startPosition = isMobileSwiper ? 'top 10%' : isTalentSwiper ? 'top 90px' : 'top top';
 
     // Create GSAP timeline for scroll-controlled swiper
     const timeline = gsap.timeline({
