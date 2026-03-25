@@ -129,12 +129,10 @@ function about() {
       ScrollTrigger.create({
         trigger: element,
         start: 'bottom 90%',
+        once: true,
         onEnter: () => {
           queue.push({ words: split.words });
           processQueue();
-        },
-        onLeaveBack: () => {
-          gsap.set(split.words, { opacity: 0, y: 5 });
         },
       });
     });
