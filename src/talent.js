@@ -5,7 +5,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 function talent() {
 
   // smooth scroll
-  window.onload = function () {
+  document.addEventListener('DOMContentLoaded', () => {
     let smoother = ScrollSmoother.create({
       wrapper: '.smooth-wrapper',
       content: '.smooth-content',
@@ -14,11 +14,9 @@ function talent() {
       effects: true
     });
 
-    // Wait for next frame to ensure DOM stability before refreshing
-    requestAnimationFrame(() => {
-      ScrollTrigger.refresh();
-    });
-  };
+    ScrollTrigger.refresh();
+
+  });
 
   // refresh scrolltrigger
   let links = document.querySelectorAll(".cc-refresh")

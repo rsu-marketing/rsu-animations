@@ -308,8 +308,8 @@ export function swiperAnimation() {
       wrapperSelector: '.c-swiper-free-wrapper.cc-talent',
     },
     {
-      swiperSelector: '.swiper',
-      wrapperSelector: '.c-swiper-free-wrapper',
+      swiperSelector: '.swiper:not(.cc-talent):not(.cc-mob)',
+      wrapperSelector: '.c-swiper-free-wrapper:not(.cc-talent):not(.cc-mob)',
     },
     {
       swiperSelector: '.swiper.cc-mob',
