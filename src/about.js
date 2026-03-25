@@ -113,8 +113,8 @@ function about() {
       duration: 0.4,
       stagger: 0.03,
       scrollTrigger: {
-        trigger: '.c-letter-container',
-        start: 'bottom 85%',
+        trigger: element,
+        start: 'top 85%',
         toggleActions: 'play none none none',
       },
     });
