@@ -92,10 +92,31 @@ function about() {
 
   // ANIM WRAPPER FOUNDER COMMENT
 
-  // Split text animation for founder comment
+  // Split text animation for founder comment with queue system
   const splitElements = document.querySelectorAll('.c-letter-container .cc-split');
 
   if (splitElements.length > 0) {
+    const animationQueue = [];
+    let isAnimating = false;
+
+    function processQueue() {
+      if (isAnimating || animationQueue.length === 0) return;
+
+      isAnimating = true;
+      const { split } = animationQueue.shift();
+
+      gsap.from(split.words, {
+        opacity: 0,
+        y: 5,
+        duration: 0.4,
+        stagger: 0.03,
+        onComplete: () => {
+          isAnimating = false;
+          processQueue(); // Process next element in queue
+        },
+      });
+    }
+
     splitElements.forEach((element) => {
       const split = new SplitText(element, {
         type: 'lines,words,chars',
@@ -105,16 +126,17 @@ function about() {
       // Hide words initially
       gsap.set(split.words, { opacity: 0, y: 5 });
 
-      // Animate when element enters viewport
-      gsap.to(split.words, {
-        opacity: 1,
-        y: 0,
-        duration: 0.4,
-        stagger: 0.03,
-        scrollTrigger: {
-          trigger: element,
-          start: 'bottom 90%',
-          toggleActions: 'play none none reverse',
+      // Add to queue when element enters viewport
+      ScrollTrigger.create({
+        trigger: element,
+        start: 'bottom 90%',
+        onEnter: () => {
+          animationQueue.push({ split, element });
+          processQueue();
+        },
+        onLeaveBack: () => {
+          // Reset animation when scrolling back up past the element
+          gsap.set(split.words, { opacity: 0, y: 5 });
         },
       });
     });
