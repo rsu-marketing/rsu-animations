@@ -1,179 +1,177 @@
 //import gsap from '../dist/gsap.js';
 
-import { ScrollTrigger, ScrollSmoother } from "./gsap/all.js";
-import { initSharedAnimations } from "./sharedAnimations.js";
+import { ScrollTrigger, ScrollSmoother } from './gsap/all.js';
+import { initSharedAnimations } from './sharedAnimations.js';
 
 // Register GSAP plugins globally
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
+import home from './home.js';
+import offline from './offline.js';
+import ecommerce from './ecommerce.js';
+import rp from './rp.js';
+import partnerships from './partnerships.js';
+import careers from './careers.js';
+import contact from './contact.js';
+import startups from './startups.js';
+import investor from './investor.js';
+import creative from './creative.js';
+import about from './about.js';
+import freelancing from './freelancing.js';
+import agency from './agency.js';
+import advisory from './advisory.js';
+import recruiting from './recruiting.js';
+import talent from './talent.js';
+import other from './other.js';
+import blog from './blog.js';
+import blogtemplate from './blogtemplate.js';
+import study from './study.js';
+import studytemplate from './studytemplate.js';
+import author from './author.js';
+import webinars from './webinars.js';
+import confirmation from './confirmation.js';
+import webinartemplate from './webinartemplate.js';
+import videotemplate from './videotemplate.js';
+import referrals from './referrals.js';
+import contractorResources from './contractor-resources.js';
 
-import home from './home.js'
-import offline from './offline.js'
-import ecommerce from './ecommerce.js'
-import rp from './rp.js'
-import partnerships from './partnerships.js'
-import careers from './careers.js'
-import contact from './contact.js'
-import startups from './startups.js'
-import investor from './investor.js'
-import creative from './creative.js'
-import about from './about.js'
-import freelancing from './freelancing.js'
-import agency from './agency.js'
-import advisory from './advisory.js'
-import recruiting from './recruiting.js'
-import talent from './talent.js'
-import other from './other.js'
-import blog from './blog.js'
-import blogtemplate from './blogtemplate.js'
-import study from './study.js'
-import studytemplate from './studytemplate.js'
-import author from './author.js'
-import webinars from './webinars.js'
-import confirmation from './confirmation.js'
-import webinartemplate from './webinartemplate.js'
-import videotemplate from './videotemplate.js'
-import referrals from './referrals.js'
-import contractorResources from './contractor-resources.js'
-
-let isHome = document.querySelector('body').classList.contains('body--home')
+let isHome = document.querySelector('body').classList.contains('body--home');
 if (isHome) {
-  home()
+  home();
 }
 
-let isOffline = document.querySelector('body').classList.contains('body--offline')
+let isOffline = document.querySelector('body').classList.contains('body--offline');
 if (isOffline) {
-  offline()
+  offline();
 }
 
-let isPartnerships = document.querySelector('body').classList.contains('body--partnerships')
+let isPartnerships = document.querySelector('body').classList.contains('body--partnerships');
 if (isPartnerships) {
-  partnerships()
+  partnerships();
 }
 
-let isEcommerce = document.querySelector('body').classList.contains('body--ecommerce')
+let isEcommerce = document.querySelector('body').classList.contains('body--ecommerce');
 if (isEcommerce) {
-  ecommerce()
+  ecommerce();
 }
 
-let isRp = document.querySelector('body').classList.contains('body--rp')
+let isRp = document.querySelector('body').classList.contains('body--rp');
 if (isRp) {
-  rp()
+  rp();
 }
 
-let isCareers = document.querySelector('body').classList.contains('body--careers')
+let isCareers = document.querySelector('body').classList.contains('body--careers');
 if (isCareers) {
-  careers()
+  careers();
 }
 
-let isStartups = document.querySelector('body').classList.contains('body--startups')
+let isStartups = document.querySelector('body').classList.contains('body--startups');
 if (isStartups) {
-  startups()
+  startups();
 }
 
-let isInvestor = document.querySelector('body').classList.contains('body--investor')
+let isInvestor = document.querySelector('body').classList.contains('body--investor');
 if (isInvestor) {
-  investor()
+  investor();
 }
 
-let isOther = document.querySelector('body').classList.contains('body--other')
+let isOther = document.querySelector('body').classList.contains('body--other');
 if (isOther) {
-  other()
+  other();
 }
 
-let isCreative = document.querySelector('body').classList.contains('body--creative')
+let isCreative = document.querySelector('body').classList.contains('body--creative');
 if (isCreative) {
-  creative()
+  creative();
 }
 
-let isAbout = document.querySelector('body').classList.contains('body--about')
+let isAbout = document.querySelector('body').classList.contains('body--about');
 if (isAbout) {
-  about()
+  about();
 }
 
-let isFreelancing = document.querySelector('body').classList.contains('body--freelancing')
+let isFreelancing = document.querySelector('body').classList.contains('body--freelancing');
 if (isFreelancing) {
-  freelancing()
+  freelancing();
 }
 
-let isAgency = document.querySelector('body').classList.contains('body--agency')
+let isAgency = document.querySelector('body').classList.contains('body--agency');
 if (isAgency) {
-  agency()
+  agency();
 }
 
-let isAdvisory = document.querySelector('body').classList.contains('body--advisory')
+let isAdvisory = document.querySelector('body').classList.contains('body--advisory');
 if (isAdvisory) {
-  advisory()
+  advisory();
 }
 
-let isRecruiting = document.querySelector('body').classList.contains('body--recruiting')
+let isRecruiting = document.querySelector('body').classList.contains('body--recruiting');
 if (isRecruiting) {
-  recruiting()
+  recruiting();
 }
 
-let isTalent = document.querySelector('body').classList.contains('body--talent')
+let isTalent = document.querySelector('body').classList.contains('body--talent');
 if (isTalent) {
-  talent()
+  talent();
 }
 
-let isBlog = document.querySelector('body').classList.contains('body--blog')
+let isBlog = document.querySelector('body').classList.contains('body--blog');
 if (isBlog) {
-  blog()
+  blog();
 }
 
-let isBlogtemplate = document.querySelector('body').classList.contains('body--blogtemplate')
+let isBlogtemplate = document.querySelector('body').classList.contains('body--blogtemplate');
 if (isBlogtemplate) {
-  blogtemplate()
+  blogtemplate();
 }
 
-let isStudy = document.querySelector('body').classList.contains('body--study')
+let isStudy = document.querySelector('body').classList.contains('body--study');
 if (isStudy) {
-  study()
+  study();
 }
 
-let isStudytemplate = document.querySelector('body').classList.contains('body--studytemplate')
+let isStudytemplate = document.querySelector('body').classList.contains('body--studytemplate');
 if (isStudytemplate) {
-  studytemplate()
+  studytemplate();
 }
 
-let isContact = document.querySelector('body').classList.contains('body--contact')
+let isContact = document.querySelector('body').classList.contains('body--contact');
 if (isContact) {
-  contact()
+  contact();
 }
 
-let isAuthor = document.querySelector('body').classList.contains('body--authors')
+let isAuthor = document.querySelector('body').classList.contains('body--authors');
 if (isAuthor) {
-  author()
+  author();
 }
 
-let isWebinars = document.querySelector('body').classList.contains('body--webinars')
+let isWebinars = document.querySelector('body').classList.contains('body--webinars');
 if (isWebinars) {
-  webinars()
+  webinars();
 }
 
-let isWebinartemplate = document.querySelector('body').classList.contains('body--webinartemplate')
+let isWebinartemplate = document.querySelector('body').classList.contains('body--webinartemplate');
 if (isWebinartemplate) {
-  webinartemplate()
+  webinartemplate();
 }
 
-let isConfirmation = document.querySelector('body').classList.contains('body--confirmation')
+let isConfirmation = document.querySelector('body').classList.contains('body--confirmation');
 if (isConfirmation) {
-  confirmation()
+  confirmation();
 }
 
-let isVideotemplate = document.querySelector('body').classList.contains('body--videotemplate')
+let isVideotemplate = document.querySelector('body').classList.contains('body--videotemplate');
 if (isVideotemplate) {
-  videotemplate()
+  videotemplate();
 }
 
-let isReferrals = document.querySelector('body').classList.contains('body--referrals')
+let isReferrals = document.querySelector('body').classList.contains('body--referrals');
 if (isReferrals) {
-  referrals()
+  referrals();
 }
-
 
 if (document.querySelector('body').classList.contains('body--contractor')) {
-  contractorResources()
+  contractorResources();
 }
 
 // Initialize shared animations on all pages
