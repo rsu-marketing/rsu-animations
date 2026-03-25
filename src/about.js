@@ -93,7 +93,7 @@ function about() {
   // ANIM WRAPPER FOUNDER COMMENT
 
   // Split text animation for founder comment
-  const splitElement = document.querySelector('.c-letter-container .cc-split');
+  const splitElement = document.querySelector('.c-letter-container.cc-split');
 
   if (splitElement) {
     const split = new SplitText(splitElement, {
