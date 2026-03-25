@@ -92,6 +92,28 @@ function about() {
 
   // ANIM WRAPPER FOUNDER COMMENT
 
+  // Split text animation for founder comment
+  const splitElement = document.querySelector('.c-letter-container .cc-split');
+
+  if (splitElement) {
+    const split = new SplitText(splitElement, {
+      type: 'lines,words,chars',
+      linesClass: 'split-line',
+    });
+
+    gsap.from(split.words, {
+      opacity: 0,
+      y: 5,
+      duration: 0.4,
+      stagger: 0.03,
+      scrollTrigger: {
+        trigger: '.c-letter-container',
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+  }
+
   // Move wrapper
 
   gsap.fromTo(

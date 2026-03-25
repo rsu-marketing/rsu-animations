@@ -115,7 +115,11 @@ export function splitTextAnimation() {
   const splitSelectors = ['.cc-split', '.cc-split-one', '.cc-split-two'];
 
   splitSelectors.forEach((selector) => {
-    const elements = document.querySelectorAll(selector);
+    let elements = document.querySelectorAll(selector);
+    // Exclude .cc-split on about page (handled by about.js)
+    if (selector === '.cc-split') {
+      elements = document.querySelectorAll(`${selector}:not(.body--about ${selector})`);
+    }
     if (elements.length === 0) return;
 
     function setupSplits() {
