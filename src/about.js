@@ -92,63 +92,53 @@ function about() {
 
   // ANIM WRAPPER FOUNDER COMMENT
 
-  // Split text animation for founder comment with queue system
-  window.addEventListener('load', function () {
-    const splitElements = document.querySelectorAll('.c-letter-container .cc-split');
+  // Split text animation with queue system
+  const splitElements = document.querySelectorAll('.c-letter-container .cc-split');
 
-    if (splitElements.length > 0) {
-      const animationQueue = [];
-      let isAnimating = false;
+  if (splitElements.length > 0) {
+    const queue = [];
+    let isAnimating = false;
 
-      function processQueue() {
-        if (isAnimating || animationQueue.length === 0) return;
+    function processQueue() {
+      if (isAnimating || queue.length === 0) return;
 
-        isAnimating = true;
-        const { split } = animationQueue.shift();
+      isAnimating = true;
+      const { words } = queue.shift();
 
-        gsap.to(split.words, {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-          stagger: 0.03,
-          onComplete: () => {
-            isAnimating = false;
-            processQueue(); // Process next element in queue
-          },
-        });
-      }
-
-      splitElements.forEach((element) => {
-        const split = new SplitText(element, {
-          type: 'lines,words,chars',
-          linesClass: 'split-line',
-        });
-
-        // Hide words initially
-        gsap.set(split.words, { opacity: 0, y: 5 });
-
-        // Create ScrollTrigger
-        const st = ScrollTrigger.create({
-          trigger: element,
-          start: 'bottom 90%',
-          onEnter: () => {
-            animationQueue.push({ split, element });
-            processQueue();
-          },
-          onLeaveBack: () => {
-            // Reset animation when scrolling back up past the element
-            gsap.set(split.words, { opacity: 0, y: 5 });
-          },
-        });
-
-        // If element is already in viewport, add to queue immediately
-        if (st.isActive) {
-          animationQueue.push({ split, element });
+      gsap.to(words, {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        stagger: 0.03,
+        onComplete: () => {
+          isAnimating = false;
           processQueue();
-        }
+        },
       });
     }
-  });
+
+    splitElements.forEach((element) => {
+      const split = new SplitText(element, {
+        type: 'lines,words,chars',
+        linesClass: 'split-line',
+      });
+
+      // Set initial hidden state
+      gsap.set(split.words, { opacity: 0, y: 5 });
+
+      ScrollTrigger.create({
+        trigger: element,
+        start: 'bottom 90%',
+        onEnter: () => {
+          queue.push({ words: split.words });
+          processQueue();
+        },
+        onLeaveBack: () => {
+          gsap.set(split.words, { opacity: 0, y: 5 });
+        },
+      });
+    });
+  }
 
   // Move wrapper
 
