@@ -93,50 +93,52 @@ function about() {
   // ANIM WRAPPER FOUNDER COMMENT
 
   // Split text animation with queue system
-  const splitElements = document.querySelectorAll('.c-letter-container .cc-split');
+  window.addEventListener('load', function () {
+    const splitElements = document.querySelectorAll('.c-letter-container .cc-split');
 
-  if (splitElements.length > 0) {
-    const queue = [];
-    let isAnimating = false;
+    if (splitElements.length > 0) {
+      const queue = [];
+      let isAnimating = false;
 
-    function processQueue() {
-      if (isAnimating || queue.length === 0) return;
+      function processQueue() {
+        if (isAnimating || queue.length === 0) return;
 
-      isAnimating = true;
-      const { words } = queue.shift();
+        isAnimating = true;
+        const { words } = queue.shift();
 
-      gsap.to(words, {
-        opacity: 1,
-        y: 0,
-        duration: 0.4,
-        stagger: 0.03,
-        onComplete: () => {
-          isAnimating = false;
-          processQueue();
-        },
+        gsap.to(words, {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          stagger: 0.03,
+          onComplete: () => {
+            isAnimating = false;
+            processQueue();
+          },
+        });
+      }
+
+      splitElements.forEach((element) => {
+        const split = new SplitText(element, {
+          type: 'lines,words,chars',
+          linesClass: 'split-line',
+        });
+
+        // Set initial hidden state
+        gsap.set(split.words, { opacity: 0, y: 5 });
+
+        ScrollTrigger.create({
+          trigger: element,
+          start: 'bottom 90%',
+          once: true,
+          onEnter: () => {
+            queue.push({ words: split.words });
+            processQueue();
+          },
+        });
       });
     }
-
-    splitElements.forEach((element) => {
-      const split = new SplitText(element, {
-        type: 'lines,words,chars',
-        linesClass: 'split-line',
-      });
-
-      // Set initial hidden state
-      gsap.set(split.words, { opacity: 0, y: 5 });
-
-      ScrollTrigger.create({
-        trigger: element,
-        start: 'bottom 90%',
-        once: true,
-        onEnter: () => {
-          queue.push({ words: split.words });
-          processQueue();
-        },
-      });
-    });
-  }
+  });
 
   // Move wrapper
 
