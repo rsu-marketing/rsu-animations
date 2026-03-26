@@ -8,3 +8,8 @@
 [split-container] {
     display:none;
 }
+
+/* Hide split text elements until JS takes over */
+.c-letter-container .cc-split {
+    opacity: 0;
+}

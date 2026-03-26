@@ -124,7 +124,8 @@ function about() {
           linesClass: 'split-line',
         });
 
-        // Set initial hidden state
+        // Show container (CSS hides it initially), then hide individual words
+        gsap.set(element, { opacity: 1 });
         gsap.set(split.words, { opacity: 0, y: 5 });
 
         ScrollTrigger.create({
