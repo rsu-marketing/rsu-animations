@@ -130,7 +130,7 @@ function about() {
 
         ScrollTrigger.create({
           trigger: element,
-          start: 'bottom 90%',
+          start: 'top 80%',
           once: true,
           onEnter: () => {
             queue.push({ words: split.words });
