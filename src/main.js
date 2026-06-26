@@ -187,17 +187,14 @@ function watchSmootherHeight() {
   if (!content) return;
 
   let lastHeight = content.scrollHeight;
-  let refreshTimer;
 
   const observer = new ResizeObserver(() => {
     const newHeight = content.scrollHeight;
     if (newHeight !== lastHeight) {
       lastHeight = newHeight;
-      clearTimeout(refreshTimer);
-      refreshTimer = setTimeout(() => {
-        const smoother = ScrollSmoother.get();
-        if (smoother) smoother.refresh();
-      }, 200);
+      // Directly sync body height with content — mirrors ScrollSmoother's
+      // internal refreshHeight() without triggering a full scroll reset
+      document.body.style.height = newHeight + 'px';
     }
   });
 
