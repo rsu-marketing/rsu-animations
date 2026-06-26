@@ -187,13 +187,17 @@ function watchSmootherHeight() {
   if (!content) return;
 
   let lastHeight = content.scrollHeight;
+  let refreshTimer;
 
   const observer = new ResizeObserver(() => {
     const newHeight = content.scrollHeight;
     if (newHeight !== lastHeight) {
       lastHeight = newHeight;
-      const smoother = ScrollSmoother.get();
-      if (smoother) smoother.refresh();
+      clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => {
+        const smoother = ScrollSmoother.get();
+        if (smoother) smoother.refresh();
+      }, 200);
     }
   });
 
