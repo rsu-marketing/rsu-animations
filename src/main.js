@@ -192,9 +192,25 @@ function watchSmootherHeight() {
     const newHeight = content.scrollHeight;
     if (newHeight !== lastHeight) {
       lastHeight = newHeight;
-      // Directly sync body height with content — mirrors ScrollSmoother's
-      // internal refreshHeight() without triggering a full scroll reset
+
+      const smoother = ScrollSmoother.get();
+      if (!smoother) return;
+
+      const st = smoother.scrollTrigger;
+      const newEnd = newHeight - window.innerHeight;
+
+      // Update body height (ScrollSmoother's scroll track)
       document.body.style.height = newHeight + 'px';
+
+      // Update the y tween's change value directly — no scroll reset
+      if (st.animation._pt) {
+        st.animation._pt.s = 0;
+        st.animation._pt.c = -newEnd;
+      }
+
+      // Update ScrollTrigger end position and recalculate progress
+      st.setPositions(0, newEnd);
+      st.update(true);
     }
   });
 
