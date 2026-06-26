@@ -180,3 +180,24 @@ if (document.querySelector('body').classList.contains('body--contractor')) {
 
 // Initialize shared animations on all pages
 initSharedAnimations();
+
+// Keep ScrollSmoother in sync with dynamic content (lazy images, injected DOM, etc.)
+function watchSmootherHeight() {
+  const content = document.querySelector('.smooth-content');
+  if (!content) return;
+
+  let lastHeight = content.scrollHeight;
+
+  const observer = new ResizeObserver(() => {
+    const newHeight = content.scrollHeight;
+    if (newHeight !== lastHeight) {
+      lastHeight = newHeight;
+      const smoother = ScrollSmoother.get();
+      if (smoother) smoother.refresh();
+    }
+  });
+
+  observer.observe(content);
+}
+
+watchSmootherHeight();
