@@ -192,9 +192,8 @@ function watchSmootherHeight() {
     const newHeight = content.scrollHeight;
     if (newHeight !== lastHeight) {
       lastHeight = newHeight;
-      // Directly sync body height with content — mirrors ScrollSmoother's
-      // internal refreshHeight() without triggering a full scroll reset
-      document.body.style.height = newHeight + 'px';
+      const smoother = ScrollSmoother.get();
+      if (smoother) smoother.refresh(true); // soft=true skips scroll position reset
     }
   });
 
