@@ -383,7 +383,7 @@ export function talentsListSwiper() {
   talentItems.forEach((item) => {
     item.classList.add('swiper-slide');
   });
-
+	const isAiPage = document.querySelector('body').classList.contains('body--ai');
   // Initialize Swiper with responsive configuration
   const swiper = new Swiper('.c-talents-slider', {
     // Core configuration
@@ -431,7 +431,7 @@ export function talentsListSwiper() {
       768: {
         slidesPerView: 2,
         spaceBetween: 25,
-        centeredSlides: true,
+        centeredSlides: isAiPage ? false : true, // Centered slides only for non-AI pages
       },
       // Desktop: 3 slides with partial preview
       992: {
