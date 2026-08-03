@@ -213,7 +213,7 @@ function watchSmootherHeight() {
       st.update(true);
     }
   });
-
+	console.log('Observing smoother content height changes...');
   observer.observe(content);
 }
 
