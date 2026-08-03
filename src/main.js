@@ -188,6 +188,10 @@ function watchSmootherHeight() {
 
   let lastHeight = content.scrollHeight;
   let savedScroll = null;
+  // After we sync height manually, suppress redundant ScrollTrigger.refresh() calls.
+  // Full refresh zeros ScrollSmoother scroll.y during measure → visible jump to top.
+  // Our setPositions sync already updates the scroll track for dynamic height.
+  let suppressRefreshUntil = 0;
 
   // #region agent log
   window.__RSU_DEBUG_LOGS__ = window.__RSU_DEBUG_LOGS__ || [];
@@ -195,7 +199,7 @@ function watchSmootherHeight() {
     const smoother = ScrollSmoother.get();
     const payload = {
       sessionId: 'f7f040',
-      runId: 'post-fix-2',
+      runId: 'post-fix-3',
       hypothesisId,
       location,
       message,
@@ -208,6 +212,7 @@ function watchSmootherHeight() {
         contentY: content ? gsap.getProperty(content, 'y') : null,
         bodyHeight: document.body.style.height,
         contentScrollHeight: content ? content.scrollHeight : null,
+        suppressRemainingMs: Math.max(0, suppressRefreshUntil - Date.now()),
       },
       timestamp: Date.now(),
     };
@@ -253,17 +258,31 @@ function watchSmootherHeight() {
     },
     true,
   );
-
-  const _origRefresh = ScrollTrigger.refresh;
-  ScrollTrigger.refresh = function patchedRefresh() {
-    __dbg('C', 'main.js:ScrollTrigger.refresh', 'ScrollTrigger.refresh() caller', {
-      stack: new Error().stack,
-    });
-    return _origRefresh.apply(this, arguments);
-  };
   // #endregion
 
-  // ScrollSmoother zeros scroll.y on refreshInit — restore after refresh without killing scrub.
+  const _origRefresh = ScrollTrigger.refresh;
+  const patchedRefresh = function patchedRefresh() {
+    const stack = new Error().stack || '';
+    if (Date.now() < suppressRefreshUntil) {
+      // #region agent log
+      __dbg('G', 'main.js:ScrollTrigger.refresh', 'SUPPRESSED refresh during height sync', {
+        stack,
+      });
+      console.warn('[RSU-DEBUG] SUPPRESSED ScrollTrigger.refresh\n', stack);
+      // #endregion
+      return;
+    }
+    // #region agent log
+    __dbg('C', 'main.js:ScrollTrigger.refresh', 'ScrollTrigger.refresh() allowing', { stack });
+    console.warn('[RSU-DEBUG] ScrollTrigger.refresh stack\n', stack);
+    // #endregion
+    return _origRefresh.apply(this, arguments);
+  };
+  ScrollTrigger.refresh = patchedRefresh;
+  // ScrollSmoother.refresh may hold the original fn reference from registration time
+  ScrollSmoother.refresh = patchedRefresh;
+
+  // Safety net if a refresh does run (e.g. orientation change) — restore scroll, keep scrub.
   ScrollTrigger.addEventListener('refreshInit', () => {
     const smoother = ScrollSmoother.get();
     if (smoother) savedScroll = smoother.scrollTop();
@@ -304,7 +323,7 @@ function watchSmootherHeight() {
     const newEnd = newHeight - window.innerHeight;
 
     // #region agent log
-    __dbg('A', 'main.js:resize-before', 'Height change — syncing without killing scrub', {
+    __dbg('A', 'main.js:resize-before', 'Height change — syncing without full refresh', {
       prevHeight,
       newHeight,
       newEnd,
@@ -312,20 +331,24 @@ function watchSmootherHeight() {
     });
     // #endregion
 
-    // Previous dynamic-height sync (lazy images, injected DOM) — keep scroll working.
+    // Dynamic-height sync (lazy images, FAQ, injected DOM) without ScrollTrigger.refresh().
     document.body.style.height = newHeight + 'px';
-    if (st.animation._pt) {
+    if (st.animation && st.animation._pt) {
       st.animation._pt.s = 0;
       st.animation._pt.c = -newEnd;
     }
     st.setPositions(0, newEnd);
     st.update(true);
 
+    // Block redundant refreshes that would flash the page to top (accordion/Webflow observers).
+    suppressRefreshUntil = Date.now() + 500;
+
     // #region agent log
-    __dbg('A', 'main.js:resize-after', 'After height sync', {
+    __dbg('A', 'main.js:resize-after', 'After height sync; refresh suppressed 500ms', {
       scrollAfter: smoother.scrollTop(),
       progressAfter: st.progress,
       stEnd: st.end,
+      suppressRefreshUntil,
     });
     // #endregion
   });
