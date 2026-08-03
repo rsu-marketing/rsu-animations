@@ -188,9 +188,83 @@ function watchSmootherHeight() {
 
   let lastHeight = content.scrollHeight;
 
+  // #region agent log
+  window.__RSU_DEBUG_LOGS__ = window.__RSU_DEBUG_LOGS__ || [];
+  const __dbg = (hypothesisId, location, message, data = {}) => {
+    const smoother = ScrollSmoother.get();
+    const payload = {
+      sessionId: 'f7f040',
+      runId: 'pre-fix',
+      hypothesisId,
+      location,
+      message,
+      data: {
+        ...data,
+        winScrollY: window.scrollY,
+        docScrollTop: document.documentElement.scrollTop,
+        bodyScrollTop: document.body.scrollTop,
+        smootherScrollTop: smoother ? smoother.scrollTop() : null,
+        contentY: content ? gsap.getProperty(content, 'y') : null,
+        bodyHeight: document.body.style.height,
+        contentScrollHeight: content ? content.scrollHeight : null,
+      },
+      timestamp: Date.now(),
+    };
+    window.__RSU_DEBUG_LOGS__.push(payload);
+    console.log('[RSU-DEBUG]', payload);
+  };
+
+  let __lastWinScrollY = window.scrollY;
+  let __lastSmootherScroll = null;
+  window.addEventListener(
+    'scroll',
+    () => {
+      const smoother = ScrollSmoother.get();
+      const cur = window.scrollY;
+      const smo = smoother ? smoother.scrollTop() : null;
+      const jumpedToTop = __lastWinScrollY > 80 && cur < 20;
+      const smoJumped =
+        __lastSmootherScroll != null && smo != null && __lastSmootherScroll > 80 && smo < 20;
+      if (jumpedToTop || smoJumped) {
+        __dbg('D', 'main.js:scroll-jump', 'Detected scroll jump toward top', {
+          fromWin: __lastWinScrollY,
+          toWin: cur,
+          fromSmo: __lastSmootherScroll,
+          toSmo: smo,
+          jumpedToTop,
+          smoJumped,
+        });
+      }
+      __lastWinScrollY = cur;
+      __lastSmootherScroll = smo;
+    },
+    { passive: true },
+  );
+
+  window.addEventListener(
+    'focusin',
+    (e) => {
+      __dbg('B', 'main.js:focusin', 'focusin fired (ScrollSmoother may scrollTo target)', {
+        targetTag: e.target && e.target.tagName,
+        targetClass: e.target && e.target.className,
+        inViewport: typeof ScrollTrigger !== 'undefined' ? ScrollTrigger.isInViewport(e.target) : null,
+      });
+    },
+    true,
+  );
+
+  ScrollTrigger.addEventListener('refreshInit', () => {
+    __dbg('C', 'main.js:refreshInit', 'ScrollTrigger refreshInit (ScrollSmoother zeros scroll.y here)');
+  });
+  ScrollTrigger.addEventListener('refresh', () => {
+    __dbg('C', 'main.js:refresh', 'ScrollTrigger refresh completed');
+  });
+  // #endregion
+
   const observer = new ResizeObserver(() => {
     const newHeight = content.scrollHeight;
     if (newHeight !== lastHeight) {
+      const prevHeight = lastHeight;
       lastHeight = newHeight;
 
       const smoother = ScrollSmoother.get();
@@ -198,6 +272,19 @@ function watchSmootherHeight() {
 
       const st = smoother.scrollTrigger;
       const newEnd = newHeight - window.innerHeight;
+      const scrollBefore = smoother.scrollTop();
+      const progressBefore = st ? st.progress : null;
+
+      // #region agent log
+      __dbg('A', 'main.js:resize-before', 'Height change detected — before sync', {
+        prevHeight,
+        newHeight,
+        newEnd,
+        scrollBefore,
+        progressBefore,
+        hasPt: !!(st && st.animation && st.animation._pt),
+      });
+      // #endregion
 
       // Update body height (ScrollSmoother's scroll track)
       document.body.style.height = newHeight + 'px';
@@ -211,10 +298,23 @@ function watchSmootherHeight() {
       // Update ScrollTrigger end position and recalculate progress
       st.setPositions(0, newEnd);
       st.update(true);
+
+      // #region agent log
+      __dbg('A', 'main.js:resize-after', 'After watchSmootherHeight sync', {
+        scrollAfter: smoother.scrollTop(),
+        progressAfter: st.progress,
+        stStart: st.start,
+        stEnd: st.end,
+      });
+      // #endregion
     }
   });
-	console.log('Observing smoother content height changes...');
+  console.log('Observing smoother content height changes...');
   observer.observe(content);
+
+  // #region agent log
+  __dbg('E', 'main.js:watch-init', 'watchSmootherHeight initialized', { lastHeight });
+  // #endregion
 }
 
 watchSmootherHeight();
