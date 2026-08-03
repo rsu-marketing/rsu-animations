@@ -1,4 +1,5 @@
 import { gsap, ScrollTrigger, ScrollSmoother } from "./gsap/all.js";
+import { bindCcRefreshLinks } from './ccRefresh.js';
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
@@ -16,16 +17,9 @@ function referrals() {
     ScrollTrigger.refresh();
   });
 
-  // Refresh ScrollTrigger on .cc-refresh link clicks
-  let links = document.querySelectorAll(".cc-refresh");
-  links.forEach((link) => {
-    link.addEventListener("click", () => {
-      setTimeout(() => {
-        ggi
-        ScrollTrigger.refresh();
-      }, 300);
-    });
-  });
+  // .cc-refresh: do not ScrollTrigger.refresh() — jumps ScrollSmoother to top.
+  // Height sync is handled by watchSmootherHeight (main.js).
+  bindCcRefreshLinks();
 
   // BG nav dropdown open
   document.addEventListener("DOMContentLoaded", function () {

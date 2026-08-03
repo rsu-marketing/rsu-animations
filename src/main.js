@@ -199,7 +199,7 @@ function watchSmootherHeight() {
     const smoother = ScrollSmoother.get();
     const payload = {
       sessionId: 'f7f040',
-      runId: 'post-fix-3',
+      runId: 'post-fix-4',
       hypothesisId,
       location,
       message,
@@ -219,7 +219,29 @@ function watchSmootherHeight() {
     window.__RSU_DEBUG_LOGS__.push(payload);
     console.log('[RSU-DEBUG]', payload);
   };
+  // #endregion
 
+  const suppressRefresh = (ms, reason) => {
+    suppressRefreshUntil = Math.max(suppressRefreshUntil, Date.now() + ms);
+    // #region agent log
+    __dbg('G', 'main.js:suppressRefresh', reason, { ms, suppressRefreshUntil });
+    // #endregion
+  };
+
+  // FAQ/.cc-refresh clicks used to schedule ScrollTrigger.refresh() at 300ms — often
+  // BEFORE height changed (suppress from ResizeObserver was too late). Block early.
+  window.__rsuOnCcRefresh = () => suppressRefresh(1500, 'cc-refresh click — suppress 1500ms');
+  document.addEventListener(
+    'click',
+    (e) => {
+      if (e.target && e.target.closest && e.target.closest('.cc-refresh')) {
+        suppressRefresh(1500, 'cc-refresh capture click — suppress 1500ms');
+      }
+    },
+    true,
+  );
+
+  // #region agent log
   let __lastWinScrollY = window.scrollY;
   let __lastSmootherScroll = null;
   window.addEventListener(
@@ -340,15 +362,14 @@ function watchSmootherHeight() {
     st.setPositions(0, newEnd);
     st.update(true);
 
-    // Block redundant refreshes that would flash the page to top (accordion/Webflow observers).
-    suppressRefreshUntil = Date.now() + 500;
+    // Block redundant refreshes that would flash the page to top.
+    suppressRefresh(1000, 'height sync — suppress refresh 1000ms');
 
     // #region agent log
-    __dbg('A', 'main.js:resize-after', 'After height sync; refresh suppressed 500ms', {
+    __dbg('A', 'main.js:resize-after', 'After height sync', {
       scrollAfter: smoother.scrollTop(),
       progressAfter: st.progress,
       stEnd: st.end,
-      suppressRefreshUntil,
     });
     // #endregion
   });

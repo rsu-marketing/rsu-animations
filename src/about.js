@@ -1,4 +1,5 @@
 import { gsap, ScrollTrigger, ScrollSmoother, SplitText } from './gsap/all.js';
+import { bindCcRefreshLinks } from './ccRefresh.js';
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 function about() {
@@ -16,14 +17,9 @@ function about() {
   });
 
   // refresh scrolltrigger
-  let links = document.querySelectorAll('.cc-refresh');
-  links.forEach((link) => {
-    link.addEventListener('click', () => {
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 300);
-    });
-  });
+  // .cc-refresh: do not ScrollTrigger.refresh() — jumps ScrollSmoother to top.
+  // Height sync is handled by watchSmootherHeight (main.js).
+  bindCcRefreshLinks();
 
   // BG nav dropdown open
 

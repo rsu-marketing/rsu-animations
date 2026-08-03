@@ -1,5 +1,6 @@
 //import gsap from "../dist/gsap.js";
 import { ScrollTrigger } from './gsap/all.js';
+import { bindCcRefreshLinks } from './ccRefresh.js';
 import { ScrollSmoother } from './gsap/all.js';
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -19,14 +20,9 @@ function blogtemplate() {
   // });
 
   // refresh scrolltrigger
-  let links = document.querySelectorAll('.cc-refresh');
-  links.forEach((link) => {
-    link.addEventListener('click', () => {
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 300);
-    });
-  });
+  // .cc-refresh: do not ScrollTrigger.refresh() — jumps ScrollSmoother to top.
+  // Height sync is handled by watchSmootherHeight (main.js).
+  bindCcRefreshLinks();
 
   // BG nav dropdown open
 
