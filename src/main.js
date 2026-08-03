@@ -188,7 +188,6 @@ function watchSmootherHeight() {
 
   let lastHeight = content.scrollHeight;
   let savedScroll = null;
-  let debounceTimer = null;
 
   // #region agent log
   window.__RSU_DEBUG_LOGS__ = window.__RSU_DEBUG_LOGS__ || [];
@@ -196,7 +195,7 @@ function watchSmootherHeight() {
     const smoother = ScrollSmoother.get();
     const payload = {
       sessionId: 'f7f040',
-      runId: 'post-fix',
+      runId: 'post-fix-2',
       hypothesisId,
       location,
       message,
@@ -255,7 +254,6 @@ function watchSmootherHeight() {
     true,
   );
 
-  // Capture who triggers full ScrollTrigger.refresh()
   const _origRefresh = ScrollTrigger.refresh;
   ScrollTrigger.refresh = function patchedRefresh() {
     __dbg('C', 'main.js:ScrollTrigger.refresh', 'ScrollTrigger.refresh() caller', {
@@ -265,7 +263,7 @@ function watchSmootherHeight() {
   };
   // #endregion
 
-  // ScrollSmoother zeros scroll.y on refreshInit — save/restore so FAQ expands don't jump to top.
+  // ScrollSmoother zeros scroll.y on refreshInit — restore after refresh without killing scrub.
   ScrollTrigger.addEventListener('refreshInit', () => {
     const smoother = ScrollSmoother.get();
     if (smoother) savedScroll = smoother.scrollTop();
@@ -278,11 +276,8 @@ function watchSmootherHeight() {
     const smoother = ScrollSmoother.get();
     if (smoother && savedScroll != null) {
       smoother.scrollTop(savedScroll);
-      const st = smoother.scrollTrigger;
-      const tween = st && st.getTween && st.getTween();
-      if (tween) tween.progress(1).kill();
       // #region agent log
-      __dbg('C', 'main.js:refresh', 'refresh — restored scroll', {
+      __dbg('C', 'main.js:refresh', 'refresh — restored scroll (scrub intact)', {
         savedScroll,
         afterRestore: smoother.scrollTop(),
       });
@@ -302,34 +297,37 @@ function watchSmootherHeight() {
     const prevHeight = lastHeight;
     lastHeight = newHeight;
 
+    const smoother = ScrollSmoother.get();
+    if (!smoother) return;
+
+    const st = smoother.scrollTrigger;
+    const newEnd = newHeight - window.innerHeight;
+
     // #region agent log
-    __dbg('A', 'main.js:resize-detected', 'Content height changed', {
+    __dbg('A', 'main.js:resize-before', 'Height change — syncing without killing scrub', {
       prevHeight,
       newHeight,
+      newEnd,
+      scrollBefore: smoother.scrollTop(),
     });
     // #endregion
 
-    // Debounce accordion/image height animation so we don't thrash refresh.
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      const smoother = ScrollSmoother.get();
-      if (!smoother) return;
+    // Previous dynamic-height sync (lazy images, injected DOM) — keep scroll working.
+    document.body.style.height = newHeight + 'px';
+    if (st.animation._pt) {
+      st.animation._pt.s = 0;
+      st.animation._pt.c = -newEnd;
+    }
+    st.setPositions(0, newEnd);
+    st.update(true);
 
-      const scrollPos = smoother.scrollTop();
-      savedScroll = scrollPos;
-
-      // #region agent log
-      __dbg('A', 'main.js:resize-sync', 'Soft-refreshing smoother after height change', {
-        scrollPos,
-        height: content.scrollHeight,
-      });
-      // #endregion
-
-      // Let ScrollSmoother.refreshHeight() set body height via soft refresh.
-      // Do NOT manually patch animation._pt / setPositions — that desyncs transform vs scroll.
-      smoother.refresh(true);
-      smoother.scrollTop(scrollPos);
-    }, 150);
+    // #region agent log
+    __dbg('A', 'main.js:resize-after', 'After height sync', {
+      scrollAfter: smoother.scrollTop(),
+      progressAfter: st.progress,
+      stEnd: st.end,
+    });
+    // #endregion
   });
 
   console.log('Observing smoother content height changes...');
