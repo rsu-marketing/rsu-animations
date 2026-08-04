@@ -188,10 +188,17 @@ function watchSmootherHeight() {
 
   let lastHeight = content.scrollHeight;
   let savedScroll = null;
-  // After we sync height manually, suppress redundant ScrollTrigger.refresh() calls.
-  // Full refresh zeros ScrollSmoother scroll.y during measure → visible jump to top.
-  // Our setPositions sync already updates the scroll track for dynamic height.
   let suppressRefreshUntil = 0;
+  let debounceTimer = null;
+
+  const getVisualY = () => {
+    const t = content.style.transform || '';
+    const m3 = t.match(/matrix3d\(([^)]+)\)/);
+    if (m3) return parseFloat(m3[1].split(',')[13]);
+    const m2 = t.match(/matrix\(([^)]+)\)/);
+    if (m2) return parseFloat(m2[1].split(',')[5]);
+    return Number(gsap.getProperty(content, 'y')) || 0;
+  };
 
   // #region agent log
   window.__RSU_DEBUG_LOGS__ = window.__RSU_DEBUG_LOGS__ || [];
@@ -199,17 +206,16 @@ function watchSmootherHeight() {
     const smoother = ScrollSmoother.get();
     const payload = {
       sessionId: 'f7f040',
-      runId: 'post-fix-4',
+      runId: 'post-fix-5',
       hypothesisId,
       location,
       message,
       data: {
         ...data,
         winScrollY: window.scrollY,
-        docScrollTop: document.documentElement.scrollTop,
-        bodyScrollTop: document.body.scrollTop,
         smootherScrollTop: smoother ? smoother.scrollTop() : null,
-        contentY: content ? gsap.getProperty(content, 'y') : null,
+        visualY: getVisualY(),
+        gsapY: content ? gsap.getProperty(content, 'y') : null,
         bodyHeight: document.body.style.height,
         contentScrollHeight: content ? content.scrollHeight : null,
         suppressRemainingMs: Math.max(0, suppressRefreshUntil - Date.now()),
@@ -228,8 +234,6 @@ function watchSmootherHeight() {
     // #endregion
   };
 
-  // FAQ/.cc-refresh clicks used to schedule ScrollTrigger.refresh() at 300ms — often
-  // BEFORE height changed (suppress from ResizeObserver was too late). Block early.
   window.__rsuOnCcRefresh = () => suppressRefresh(1500, 'cc-refresh click — suppress 1500ms');
   document.addEventListener(
     'click',
@@ -242,41 +246,43 @@ function watchSmootherHeight() {
   );
 
   // #region agent log
-  let __lastWinScrollY = window.scrollY;
+  let __lastVisualY = getVisualY();
   let __lastSmootherScroll = null;
+  const detectVisualJump = (source) => {
+    const smoother = ScrollSmoother.get();
+    const visualY = getVisualY();
+    const smo = smoother ? smoother.scrollTop() : null;
+    // visualY is negative when scrolled down; jump-to-top ≈ visualY near 0 while we were scrolled
+    const wasScrolled = __lastVisualY < -80 || (__lastSmootherScroll != null && __lastSmootherScroll > 80);
+    const nowAtTop = visualY > -20;
+    if (wasScrolled && nowAtTop) {
+      __dbg('H', 'main.js:visual-jump', 'Content transform jumped toward top', {
+        source,
+        fromVisualY: __lastVisualY,
+        toVisualY: visualY,
+        fromSmo: __lastSmootherScroll,
+        toSmo: smo,
+      });
+    }
+    __lastVisualY = visualY;
+    __lastSmootherScroll = smo;
+  };
+
   window.addEventListener(
     'scroll',
-    () => {
-      const smoother = ScrollSmoother.get();
-      const cur = window.scrollY;
-      const smo = smoother ? smoother.scrollTop() : null;
-      const jumpedToTop = __lastWinScrollY > 80 && cur < 20;
-      const smoJumped =
-        __lastSmootherScroll != null && smo != null && __lastSmootherScroll > 80 && smo < 20;
-      if (jumpedToTop || smoJumped) {
-        __dbg('D', 'main.js:scroll-jump', 'Detected scroll jump toward top', {
-          fromWin: __lastWinScrollY,
-          toWin: cur,
-          fromSmo: __lastSmootherScroll,
-          toSmo: smo,
-          jumpedToTop,
-          smoJumped,
-        });
-      }
-      __lastWinScrollY = cur;
-      __lastSmootherScroll = smo;
-    },
+    () => detectVisualJump('scroll'),
     { passive: true },
   );
 
   window.addEventListener(
     'focusin',
     (e) => {
-      __dbg('B', 'main.js:focusin', 'focusin fired (ScrollSmoother may scrollTo target)', {
+      __dbg('B', 'main.js:focusin', 'focusin fired', {
         targetTag: e.target && e.target.tagName,
         targetClass: e.target && e.target.className,
         inViewport: typeof ScrollTrigger !== 'undefined' ? ScrollTrigger.isInViewport(e.target) : null,
       });
+      requestAnimationFrame(() => detectVisualJump('focusin-raf'));
     },
     true,
   );
@@ -287,29 +293,23 @@ function watchSmootherHeight() {
     const stack = new Error().stack || '';
     if (Date.now() < suppressRefreshUntil) {
       // #region agent log
-      __dbg('G', 'main.js:ScrollTrigger.refresh', 'SUPPRESSED refresh during height sync', {
-        stack,
-      });
-      console.warn('[RSU-DEBUG] SUPPRESSED ScrollTrigger.refresh\n', stack);
+      __dbg('G', 'main.js:ScrollTrigger.refresh', 'SUPPRESSED refresh', { stack });
       // #endregion
       return;
     }
     // #region agent log
-    __dbg('C', 'main.js:ScrollTrigger.refresh', 'ScrollTrigger.refresh() allowing', { stack });
-    console.warn('[RSU-DEBUG] ScrollTrigger.refresh stack\n', stack);
+    __dbg('C', 'main.js:ScrollTrigger.refresh', 'ALLOWING refresh', { stack });
     // #endregion
     return _origRefresh.apply(this, arguments);
   };
   ScrollTrigger.refresh = patchedRefresh;
-  // ScrollSmoother.refresh may hold the original fn reference from registration time
   ScrollSmoother.refresh = patchedRefresh;
 
-  // Safety net if a refresh does run (e.g. orientation change) — restore scroll, keep scrub.
   ScrollTrigger.addEventListener('refreshInit', () => {
     const smoother = ScrollSmoother.get();
     if (smoother) savedScroll = smoother.scrollTop();
     // #region agent log
-    __dbg('C', 'main.js:refreshInit', 'refreshInit — saved scroll', { savedScroll });
+    __dbg('C', 'main.js:refreshInit', 'refreshInit', { savedScroll });
     // #endregion
   });
 
@@ -318,60 +318,104 @@ function watchSmootherHeight() {
     if (smoother && savedScroll != null) {
       smoother.scrollTop(savedScroll);
       // #region agent log
-      __dbg('C', 'main.js:refresh', 'refresh — restored scroll (scrub intact)', {
+      __dbg('C', 'main.js:refresh', 'restored after refresh', {
         savedScroll,
         afterRestore: smoother.scrollTop(),
+        visualY: getVisualY(),
       });
       // #endregion
       savedScroll = null;
-    } else {
-      // #region agent log
-      __dbg('C', 'main.js:refresh', 'refresh completed (no restore)', { savedScroll });
-      // #endregion
     }
   });
 
-  const observer = new ResizeObserver(() => {
-    const newHeight = content.scrollHeight;
-    if (newHeight === lastHeight) return;
+  // Block ScrollSmoother focus scrollTo during FAQ (matches "top then to FAQ item")
+  const patchSmootherScrollTo = () => {
+    const smoother = ScrollSmoother.get();
+    if (!smoother || smoother.__rsuPatchedScrollTo) return;
+    smoother.__rsuPatchedScrollTo = true;
+    const origScrollTo = smoother.scrollTo.bind(smoother);
+    smoother.scrollTo = function (target, smooth, position) {
+      // #region agent log
+      __dbg('I', 'main.js:scrollTo', 'ScrollSmoother.scrollTo called', {
+        smooth,
+        position,
+        suppressed: Date.now() < suppressRefreshUntil,
+        stack: new Error().stack,
+      });
+      // #endregion
+      if (Date.now() < suppressRefreshUntil) return this;
+      return origScrollTo(target, smooth, position);
+    };
+  };
+  patchSmootherScrollTo();
+  document.addEventListener('DOMContentLoaded', patchSmootherScrollTo);
+  setTimeout(patchSmootherScrollTo, 0);
+  setTimeout(patchSmootherScrollTo, 500);
 
-    const prevHeight = lastHeight;
-    lastHeight = newHeight;
-
+  const syncHeight = (newHeight) => {
     const smoother = ScrollSmoother.get();
     if (!smoother) return;
 
     const st = smoother.scrollTrigger;
-    const newEnd = newHeight - window.innerHeight;
+    if (!st) return;
+
+    const newEnd = Math.max(0, newHeight - window.innerHeight);
+    const scrollPos = smoother.scrollTop();
+    const visualBefore = getVisualY();
 
     // #region agent log
-    __dbg('A', 'main.js:resize-before', 'Height change — syncing without full refresh', {
-      prevHeight,
+    __dbg('H', 'main.js:sync-before', 'Debounced height sync start', {
       newHeight,
       newEnd,
-      scrollBefore: smoother.scrollTop(),
+      scrollPos,
+      visualBefore,
     });
     // #endregion
 
-    // Dynamic-height sync (lazy images, FAQ, injected DOM) without ScrollTrigger.refresh().
     document.body.style.height = newHeight + 'px';
     if (st.animation && st.animation._pt) {
       st.animation._pt.s = 0;
       st.animation._pt.c = -newEnd;
     }
-    st.setPositions(0, newEnd);
-    st.update(true);
 
-    // Block redundant refreshes that would flash the page to top.
+    // Pause scrub so setPositions/update cannot animate content through y=0
+    const scrub = st.getTween && st.getTween();
+    if (scrub) scrub.pause();
+
+    st.setPositions(0, newEnd);
+
+    // Pin visual scroll immediately (absolute pixel position, not progress)
+    smoother.scrollTop(scrollPos);
+    if (scrub) scrub.progress(1);
+
     suppressRefresh(1000, 'height sync — suppress refresh 1000ms');
 
     // #region agent log
-    __dbg('A', 'main.js:resize-after', 'After height sync', {
+    __dbg('H', 'main.js:sync-after', 'Debounced height sync done', {
       scrollAfter: smoother.scrollTop(),
+      visualAfter: getVisualY(),
       progressAfter: st.progress,
       stEnd: st.end,
     });
+    detectVisualJump('sync-after');
     // #endregion
+  };
+
+  const observer = new ResizeObserver(() => {
+    const newHeight = content.scrollHeight;
+    if (newHeight === lastHeight) return;
+    lastHeight = newHeight;
+
+    // #region agent log
+    __dbg('A', 'main.js:resize-detected', 'Height changed — debounce sync', {
+      newHeight,
+      visualY: getVisualY(),
+    });
+    // #endregion
+
+    // Wait for accordion animation to settle — syncing every frame caused visual jumps
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => syncHeight(content.scrollHeight), 150);
   });
 
   console.log('Observing smoother content height changes...');
